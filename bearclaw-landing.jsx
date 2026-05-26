@@ -1,0 +1,319 @@
+import { useState, useEffect, useRef } from "react";
+
+const GOLD = "#B8963E";
+const GOLD_LIGHT = "#D4AD5A";
+const GOLD_DIM = "rgba(184,150,62,0.15)";
+const GOLD_BORDER = "rgba(184,150,62,0.22)";
+const BG = "#080706";
+const BG2 = "#0d0b09";
+const TEXT = "#EDE8DF";
+const MUTED = "rgba(237,232,223,0.45)";
+const DIMMER = "rgba(237,232,223,0.2)";
+
+const HERO_IMG   = "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1600&q=85";
+const IMG_TRAIL  = "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=900&q=85";
+const IMG_ROCK   = "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?w=900&q=85";
+const IMG_FINISH = "https://images.unsplash.com/photo-1502224562085-639556652f33?w=900&q=85";
+
+const stats = [
+  { value: "2–14%", label: "des marathoniens perdent un ongle par saison" },
+  { value: "240M+", label: "sportifs concernés dans le monde" },
+  { value: "0",     label: "produit conçu pour ça jusqu'ici" },
+];
+
+const problems = [
+  { num: "01", title: "L'hématome", desc: "Le sang s'accumule sous l'ongle après des kilomètres de frottement contre la chaussure. Ça noircit, ça gonfle, ça fait mal." },
+  { num: "02", title: "L'ongle qui tombe", desc: "Le nail bed se décolle. L'ongle part. Long à repousser, parfois déformé. Toujours au pire moment de la saison." },
+  { num: "03", title: "L'infection qui suit", desc: "Un ongle fragilisé est une porte d'entrée pour les champignons. Le problème devient chronique et difficile à traiter." },
+];
+
+const features = [
+  { title: "Film protecteur technique", desc: "Coating haute résistance qui absorbe les micro-impacts répétés sans se fissurer ni se décoller." },
+  { title: "Renforcement à la kératine", desc: "Pénètre la structure de l'ongle pour le renforcer de l'intérieur. Pas juste une couche de surface." },
+  { title: "Tenue 7 jours transpiration", desc: "Formulé pour résister à la sueur intensive, l'humidité et le frottement prolongé dans la chaussure." },
+  { title: "Finition mat. Discret. Invisible.", desc: "Sous une chaussette, ça ne se voit pas. C'est de l'équipement de protection, pas du maquillage." },
+];
+
+export default function BearclawLanding() {
+  const [email, setEmail]         = useState("");
+  const [sport, setSport]         = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [count, setCount]         = useState(53);
+  const [visible, setVisible]     = useState({});
+  const refs = useRef({});
+
+  useEffect(() => {
+    const t = setInterval(() => setCount(c => c + 1), 13000);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) setVisible(v => ({ ...v, [e.target.dataset.k]: true }));
+      }),
+      { threshold: 0.1 }
+    );
+    Object.values(refs.current).forEach(el => el && io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  const reg = k => el => { refs.current[k] = el; if (el) el.dataset.k = k; };
+  const fade = (k, delay = 0, y = 24) => ({
+    opacity:   visible[k] ? 1 : 0,
+    transform: visible[k] ? "translateY(0)" : `translateY(${y}px)`,
+    transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`,
+  });
+
+  return (
+    <div style={{ fontFamily: "'Bebas Neue', 'Arial Narrow', Arial, sans-serif", background: BG, color: TEXT, minHeight: "100vh", overflowX: "hidden" }}>
+
+      {/* Google Fonts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::selection { background: ${GOLD}; color: ${BG}; }
+        input::placeholder { color: ${MUTED}; }
+        input:focus, select:focus { border-color: ${GOLD_BORDER} !important; outline: none; }
+      `}</style>
+
+      {/* ── NAV ── */}
+      <nav style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"20px 28px", position:"sticky", top:0, zIndex:100, background:`rgba(8,7,6,0.93)`, backdropFilter:"blur(18px)", borderBottom:`1px solid rgba(255,255,255,0.04)` }}>
+        <div style={{ display:"flex", flexDirection:"column", lineHeight:1 }}>
+          <span style={{ fontSize:26, fontWeight:900, letterSpacing:"0.2em", color:TEXT }}>BEARCLAW</span>
+          <span style={{ fontSize:9, letterSpacing:"0.35em", color:GOLD, fontFamily:"'Barlow', sans-serif", fontWeight:500, marginTop:2 }}>PROTECT YOUR CLAWS</span>
+        </div>
+        <a href="#precommande" style={{ background:GOLD, color:BG, padding:"10px 20px", borderRadius:2, textDecoration:"none", fontSize:11, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:"'Barlow', sans-serif" }}>
+          Précommander — 19,90€
+        </a>
+      </nav>
+
+      {/* ── HERO ── */}
+      <section style={{ position:"relative", minHeight:"95vh", display:"flex", alignItems:"flex-end" }}>
+        <div style={{ position:"absolute", inset:0, backgroundImage:`linear-gradient(to bottom, rgba(8,7,6,0.4) 0%, rgba(8,7,6,0.7) 55%, ${BG} 100%), url(${HERO_IMG})`, backgroundSize:"cover", backgroundPosition:"center 30%" }} />
+
+        {/* gold line accent */}
+        <div style={{ position:"absolute", left:0, top:"15%", width:3, height:"35%", background:`linear-gradient(to bottom, transparent, ${GOLD}, transparent)` }} />
+
+        <div style={{ position:"relative", zIndex:2, padding:"0 28px 72px", maxWidth:720, margin:"0 auto", width:"100%" }}>
+          <div style={{ display:"inline-flex", alignItems:"center", gap:10, marginBottom:32 }}>
+            <div style={{ width:28, height:1, background:GOLD }} />
+            <span style={{ fontSize:10, letterSpacing:"0.25em", color:GOLD, fontFamily:"'Barlow', sans-serif", fontWeight:500 }}>BÊTA PRIVÉE · PLACES LIMITÉES</span>
+          </div>
+
+          <h1 style={{ fontSize:"clamp(58px,13vw,110px)", lineHeight:0.92, fontWeight:900, letterSpacing:"0.02em", margin:"0 0 28px", textTransform:"uppercase" }}>
+            PROTECT<br />
+            <span style={{ color:GOLD, WebkitTextStroke:`1px ${GOLD}`, WebkitTextFillColor:"transparent" }}>YOUR</span><br />
+            CLAWS.
+          </h1>
+
+          <p style={{ fontSize:16, lineHeight:1.7, color:MUTED, maxWidth:460, margin:"0 0 40px", fontFamily:"'Barlow', sans-serif", fontWeight:300, letterSpacing:"0.02em" }}>
+            Le premier coating technique conçu pour les coureurs de trail et de running.
+            Fini les ongles noirs, les hématomes, les ongles qui tombent.
+          </p>
+
+          <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:32 }}>
+            <a href="#precommande" style={{ background:GOLD, color:BG, padding:"17px 32px", borderRadius:2, textDecoration:"none", fontSize:13, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", textAlign:"center", display:"block", fontFamily:"'Barlow', sans-serif" }}>
+              Je précommande — 19,90€
+            </a>
+            <a href="#probleme" style={{ color:DIMMER, padding:"12px 0", textDecoration:"none", fontSize:11, letterSpacing:"0.12em", textTransform:"uppercase", textAlign:"center", display:"block", fontFamily:"'Barlow', sans-serif" }}>
+              Comprendre le problème ↓
+            </a>
+          </div>
+
+          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+            <div style={{ width:8, height:8, borderRadius:"50%", background:GOLD, boxShadow:`0 0 10px ${GOLD}`, flexShrink:0 }} />
+            <span style={{ fontSize:12, color:DIMMER, fontFamily:"'Barlow', sans-serif", letterSpacing:"0.06em" }}>
+              <strong style={{ color:`rgba(237,232,223,0.6)` }}>{count} coureurs</strong> ont déjà rejoint la liste
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ── STATS ── */}
+      <div ref={reg("stats")} style={{ borderTop:`1px solid rgba(255,255,255,0.06)`, borderBottom:`1px solid rgba(255,255,255,0.06)`, ...fade("stats") }}>
+        {stats.map((s, i) => (
+          <div key={i} style={{ padding:"32px 28px", borderBottom:`1px solid rgba(255,255,255,0.04)`, maxWidth:720, margin:"0 auto", width:"100%" }}>
+            <div style={{ fontSize:"clamp(44px,9vw,72px)", fontWeight:900, color:GOLD, letterSpacing:"-0.02em", lineHeight:1, marginBottom:8 }}>{s.value}</div>
+            <div style={{ fontSize:11, color:MUTED, letterSpacing:"0.12em", textTransform:"uppercase", fontFamily:"'Barlow', sans-serif", fontWeight:400 }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── PROBLÈME ── */}
+      <section id="probleme" style={{ padding:"88px 28px", maxWidth:720, margin:"0 auto" }}>
+        <div ref={reg("pt")} style={{ marginBottom:52, ...fade("pt") }}>
+          <div style={{ display:"inline-flex", alignItems:"center", gap:10, marginBottom:22 }}>
+            <div style={{ width:20, height:1, background:GOLD }} />
+            <span style={{ fontSize:10, letterSpacing:"0.25em", color:GOLD, fontFamily:"'Barlow', sans-serif", fontWeight:500 }}>LE PROBLÈME</span>
+          </div>
+          <h2 style={{ fontSize:"clamp(30px,6vw,52px)", fontWeight:900, lineHeight:1.05, letterSpacing:"0.02em", textTransform:"uppercase" }}>
+            Ce qui arrive à ton pied<br />après 30 km de descente.
+          </h2>
+        </div>
+
+        <div ref={reg("pimg")} style={{ position:"relative", borderRadius:4, overflow:"hidden", marginBottom:52, aspectRatio:"16/7", ...fade("pimg", 0.1) }}>
+          <img src={IMG_TRAIL} alt="Trail runner" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
+          <div style={{ position:"absolute", inset:0, background:`linear-gradient(to top, rgba(8,7,6,0.9) 0%, rgba(8,7,6,0.1) 60%)` }} />
+          <div style={{ position:"absolute", bottom:24, left:28, right:28 }}>
+            <div style={{ width:24, height:1, background:GOLD, marginBottom:12 }} />
+            <p style={{ fontSize:14, lineHeight:1.6, color:`rgba(237,232,223,0.7)`, fontStyle:"italic", fontFamily:"'Barlow', sans-serif", fontWeight:300 }}>
+              "Presque tous les coureurs ayant un programme marathon sérieux développent au moins un ongle noir."
+            </p>
+            <p style={{ fontSize:10, color:MUTED, letterSpacing:"0.12em", textTransform:"uppercase", fontFamily:"'Barlow', sans-serif", marginTop:8 }}>— Jeff Galloway, coach running, 45 ans d'expérience</p>
+          </div>
+        </div>
+
+        {problems.map((p, i) => (
+          <div key={i} ref={reg(`p${i}`)} style={{ display:"flex", gap:28, alignItems:"flex-start", padding:"28px 0", borderBottom:`1px solid rgba(255,255,255,0.05)`, ...fade(`p${i}`, i*0.1) }}>
+            <div style={{ fontSize:10, fontWeight:700, color:GOLD, letterSpacing:"0.15em", minWidth:28, paddingTop:5, fontFamily:"'Barlow', sans-serif" }}>{p.num}</div>
+            <div>
+              <h3 style={{ fontSize:"clamp(18px,4vw,24px)", fontWeight:900, letterSpacing:"0.05em", margin:"0 0 10px", textTransform:"uppercase" }}>{p.title}</h3>
+              <p style={{ fontSize:14, color:MUTED, lineHeight:1.7, margin:0, fontFamily:"'Barlow', sans-serif", fontWeight:300 }}>{p.desc}</p>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* ── SOLUTION ── */}
+      <section style={{ background:BG2, padding:"88px 0", borderTop:`1px solid rgba(255,255,255,0.04)`, borderBottom:`1px solid rgba(255,255,255,0.04)` }}>
+        <div style={{ maxWidth:720, margin:"0 auto", padding:"0 28px" }}>
+          <div ref={reg("st")} style={{ marginBottom:52, ...fade("st") }}>
+            <div style={{ display:"inline-flex", alignItems:"center", gap:10, marginBottom:22 }}>
+              <div style={{ width:20, height:1, background:GOLD }} />
+              <span style={{ fontSize:10, letterSpacing:"0.25em", color:GOLD, fontFamily:"'Barlow', sans-serif", fontWeight:500 }}>LA SOLUTION</span>
+            </div>
+            <h2 style={{ fontSize:"clamp(30px,6vw,52px)", fontWeight:900, lineHeight:1.05, letterSpacing:"0.02em", textTransform:"uppercase", margin:"0 0 16px" }}>
+              Un coating.<br />Pas un vernis.
+            </h2>
+            <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, fontFamily:"'Barlow', sans-serif", fontWeight:300 }}>
+              BEARCLAW est formulé comme un équipement de protection. La nuance est totale.
+            </p>
+          </div>
+
+          <div ref={reg("simg")} style={{ borderRadius:4, overflow:"hidden", aspectRatio:"16/9", marginBottom:40, ...fade("simg", 0.1) }}>
+            <img src={IMG_ROCK} alt="Trail montagne" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
+          </div>
+
+          {features.map((f, i) => (
+            <div key={i} ref={reg(`f${i}`)} style={{ display:"flex", gap:28, alignItems:"flex-start", padding:"22px 0", borderBottom:`1px solid rgba(255,255,255,0.05)`, opacity:visible[`f${i}`]?1:0, transform:visible[`f${i}`]?"translateX(0)":"translateX(-18px)", transition:`opacity 0.65s ease ${i*0.1}s, transform 0.65s ease ${i*0.1}s` }}>
+              <div style={{ fontSize:10, fontWeight:700, color:GOLD, letterSpacing:"0.15em", minWidth:28, paddingTop:4, fontFamily:"'Barlow', sans-serif" }}>{String(i+1).padStart(2,"0")}</div>
+              <div>
+                <div style={{ fontSize:16, fontWeight:900, letterSpacing:"0.06em", marginBottom:7, textTransform:"uppercase" }}>{f.title}</div>
+                <div style={{ fontSize:13, color:MUTED, lineHeight:1.65, fontFamily:"'Barlow', sans-serif", fontWeight:300 }}>{f.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── BANNER IMAGE ── */}
+      <div ref={reg("ban")} style={{ position:"relative", aspectRatio:"21/8", overflow:"hidden", ...fade("ban") }}>
+        <img src={IMG_FINISH} alt="Coureur finish" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
+        <div style={{ position:"absolute", inset:0, background:`linear-gradient(to right, rgba(8,7,6,0.88) 0%, rgba(8,7,6,0.25) 100%)` }} />
+        <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", padding:"0 32px" }}>
+          <div>
+            <div style={{ width:24, height:1, background:GOLD, marginBottom:16 }} />
+            <div style={{ fontSize:"clamp(24px,5vw,44px)", fontWeight:900, lineHeight:1.1, letterSpacing:"0.04em", textTransform:"uppercase", maxWidth:380 }}>
+              Chaque kilomètre compte.<br />
+              <span style={{ color:GOLD }}>Tes ongles aussi.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── PRÉCOMMANDE ── */}
+      <section id="precommande" style={{ background:`linear-gradient(160deg, #100d06 0%, ${BG} 65%)`, padding:"88px 28px", borderTop:`1px solid ${GOLD_BORDER}` }}>
+        <div style={{ maxWidth:560, margin:"0 auto" }}>
+          <div ref={reg("ct")} style={{ marginBottom:40, ...fade("ct") }}>
+            <div style={{ display:"inline-flex", alignItems:"center", gap:10, marginBottom:22 }}>
+              <div style={{ width:20, height:1, background:GOLD }} />
+              <span style={{ fontSize:10, letterSpacing:"0.25em", color:GOLD, fontFamily:"'Barlow', sans-serif", fontWeight:500 }}>ACCÈS BÊTA PRIVÉE</span>
+            </div>
+            <h2 style={{ fontSize:"clamp(30px,6vw,48px)", fontWeight:900, lineHeight:1.05, letterSpacing:"0.02em", textTransform:"uppercase", margin:"0 0 16px" }}>
+              Sois parmi les premiers.<br />Façonne le produit.
+            </h2>
+            <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, fontFamily:"'Barlow', sans-serif", fontWeight:300 }}>
+              Les précommandeurs bêta reçoivent BEARCLAW en avant-première, à prix fondateur,
+              et participent aux tests qui valident la formule finale.
+            </p>
+          </div>
+
+          {!submitted ? (
+            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+              <input type="email" placeholder="ton@email.com" value={email}
+                onChange={e => setEmail(e.target.value)}
+                style={{ background:"rgba(255,255,255,0.04)", border:`1px solid rgba(255,255,255,0.08)`, borderRadius:2, padding:"15px 18px", color:TEXT, fontSize:14, fontFamily:"'Barlow', sans-serif", fontWeight:300, width:"100%" }} />
+              <select value={sport} onChange={e => setSport(e.target.value)}
+                style={{ background:"rgba(255,255,255,0.04)", border:`1px solid rgba(255,255,255,0.08)`, borderRadius:2, padding:"15px 18px", color:sport?TEXT:MUTED, fontSize:14, fontFamily:"'Barlow', sans-serif", fontWeight:300, width:"100%" }}>
+                <option value="">Ton sport principal</option>
+                <option value="trail">Trail running</option>
+                <option value="marathon">Marathon / route</option>
+                <option value="triathlon">Triathlon</option>
+                <option value="football">Football</option>
+                <option value="autre">Autre</option>
+              </select>
+              <button onClick={() => { if(email) setSubmitted(true); }}
+                style={{ background:GOLD, color:BG, border:"none", borderRadius:2, padding:"17px 24px", fontSize:12, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", cursor:"pointer", width:"100%", marginTop:4, fontFamily:"'Barlow', sans-serif" }}>
+                Je précommande — 19,90€ · Remboursé si non livré
+              </button>
+              <p style={{ fontSize:11, color:DIMMER, lineHeight:1.6, textAlign:"center", letterSpacing:"0.04em", fontFamily:"'Barlow', sans-serif", marginTop:6 }}>
+                Paiement sécurisé · Débité uniquement à la livraison · Remboursement intégral garanti
+              </p>
+            </div>
+          ) : (
+            <div style={{ background:GOLD_DIM, border:`1px solid ${GOLD_BORDER}`, borderRadius:4, padding:"40px 28px", textAlign:"center" }}>
+              <div style={{ width:52, height:52, borderRadius:"50%", background:GOLD, color:BG, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", fontSize:22, fontWeight:900 }}>✓</div>
+              <h3 style={{ fontSize:22, fontWeight:900, margin:"0 0 12px", letterSpacing:"0.08em", textTransform:"uppercase" }}>Tu es dans la liste.</h3>
+              <p style={{ fontSize:14, color:MUTED, lineHeight:1.65, margin:"0 0 24px", fontFamily:"'Barlow', sans-serif", fontWeight:300 }}>
+                On te contacte en premier dès que BEARCLAW est prêt.
+                Partage avec tes partenaires de trail.
+              </p>
+              <button onClick={() => navigator.clipboard?.writeText(window.location.href)}
+                style={{ background:"transparent", border:`1px solid ${GOLD_BORDER}`, color:GOLD, padding:"12px 24px", borderRadius:2, fontSize:11, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", cursor:"pointer", fontFamily:"'Barlow', sans-serif" }}>
+                Copier le lien à partager
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section style={{ padding:"88px 28px", maxWidth:720, margin:"0 auto" }}>
+        <div ref={reg("fq")} style={{ marginBottom:52, ...fade("fq") }}>
+          <div style={{ display:"inline-flex", alignItems:"center", gap:10, marginBottom:22 }}>
+            <div style={{ width:20, height:1, background:GOLD }} />
+            <span style={{ fontSize:10, letterSpacing:"0.25em", color:GOLD, fontFamily:"'Barlow', sans-serif", fontWeight:500 }}>FAQ</span>
+          </div>
+          <h2 style={{ fontSize:"clamp(30px,6vw,52px)", fontWeight:900, lineHeight:1.05, letterSpacing:"0.02em", textTransform:"uppercase" }}>
+            Questions directes,<br />réponses directes.
+          </h2>
+        </div>
+        {[
+          { q:"C'est quoi exactement BEARCLAW ?", a:"Un coating protecteur pour ongles de pieds, formulé pour résister aux contraintes mécaniques du sport intensif. Dureté, flexibilité, tenue longue durée sous transpiration. Pas un vernis cosmétique ordinaire." },
+          { q:"Est-ce que les hommes utilisent vraiment ça ?", a:"Les hommes qui perdent des ongles après un trail, oui. Ce n'est pas un vernis — c'est un équipement de protection. Finition noire mate ou transparente. Invisible sous une chaussette." },
+          { q:"Pourquoi précommander maintenant ?", a:"On valide la demande avant de lancer la production. Si l'objectif est atteint, on produit. Sinon, tu es remboursé intégralement. Zéro risque pour toi." },
+          { q:"Quand est-ce que je reçois le produit ?", a:"Estimation honnête : 4 à 6 mois après la fin de la campagne. On ne promet pas ce qu'on ne peut pas tenir. Tu seras informé à chaque étape." },
+        ].map((faq, i) => (
+          <div key={i} ref={reg(`faq${i}`)} style={{ padding:"28px 0", borderBottom:`1px solid rgba(255,255,255,0.05)`, ...fade(`faq${i}`, i*0.08) }}>
+            <h3 style={{ fontSize:"clamp(16px,3vw,20px)", fontWeight:900, margin:"0 0 12px", letterSpacing:"0.04em", textTransform:"uppercase" }}>{faq.q}</h3>
+            <p style={{ fontSize:14, color:MUTED, lineHeight:1.7, margin:0, fontFamily:"'Barlow', sans-serif", fontWeight:300 }}>{faq.a}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer style={{ borderTop:`1px solid rgba(255,255,255,0.05)`, padding:"48px 28px", textAlign:"center" }}>
+        <div style={{ fontSize:24, fontWeight:900, letterSpacing:"0.2em", marginBottom:6 }}>BEARCLAW</div>
+        <div style={{ fontSize:9, letterSpacing:"0.35em", color:GOLD, fontFamily:"'Barlow', sans-serif", fontWeight:500, marginBottom:20 }}>PROTECT YOUR CLAWS</div>
+        <p style={{ fontSize:11, color:DIMMER, letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'Barlow', sans-serif", margin:"0 0 8px" }}>
+          Un projet fondé par des sportifs, pour des sportifs · France · 2025
+        </p>
+        <p style={{ fontSize:10, color:"rgba(237,232,223,0.12)", fontFamily:"'Barlow', sans-serif", margin:0 }}>
+          © 2025 BEARCLAW. Produit en cours de développement. Tous droits réservés.
+        </p>
+      </footer>
+
+    </div>
+  );
+}
