@@ -17,7 +17,7 @@
     ::selection { background: #B8963E; color: #080706; }
     input::placeholder { color: rgba(237,232,223,0.35); }
     input:focus, select:focus { outline: none; border-color: rgba(184,150,62,0.4) !important; }
-    @keyframes pulse { 0%,100% { box-shadow: 0 0 6px #B8963E; } 50% { box-shadow: 0 0 14px #B8963E; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -44,29 +44,22 @@ const stats = [
   { value:"0",     label:"produit conçu pour ça jusqu'ici" },
 ];
 const problems = [
-  { num:"01", title:"L'hématome",         desc:"Le sang s'accumule sous l'ongle après des kilomètres de frottement contre la chaussure. Ça noircit, ça gonfle, ça fait mal." },
-  { num:"02", title:"L'ongle qui tombe",  desc:"Le nail bed se décolle. L'ongle part. Long à repousser, parfois déformé. Toujours au pire moment de la saison." },
-  { num:"03", title:"L'infection qui suit", desc:"Un ongle fragilisé est une porte d'entrée pour les champignons. Le problème devient chronique et difficile à traiter." },
+  { num:"01", title:"L'hématome",          desc:"Le sang s'accumule sous l'ongle après des kilomètres de frottement contre la chaussure. Ça noircit, ça gonfle, ça fait mal." },
+  { num:"02", title:"L'ongle qui tombe",   desc:"Le nail bed se décolle. L'ongle part. Long à repousser, parfois déformé. Toujours au pire moment de la saison." },
+  { num:"03", title:"L'infection qui suit",desc:"Un ongle fragilisé est une porte d'entrée pour les champignons. Le problème devient chronique et difficile à traiter." },
 ];
 const features = [
-  { title:"Film protecteur technique",      desc:"Coating haute résistance qui absorbe les micro-impacts répétés sans se fissurer ni se décoller." },
-  { title:"Renforcement à la kératine",     desc:"Pénètre la structure de l'ongle pour le renforcer de l'intérieur. Pas juste une couche de surface." },
-  { title:"Tenue 7 jours transpiration",    desc:"Formulé pour résister à la sueur intensive, l'humidité et le frottement prolongé dans la chaussure." },
-  { title:"Finition mat. Discret. Invisible.", desc:"Sous une chaussette, ça ne se voit pas. C'est de l'équipement de protection, pas du maquillage." },
+  { title:"Film protecteur technique",        desc:"Coating haute résistance qui absorbe les micro-impacts répétés sans se fissurer ni se décoller." },
+  { title:"Renforcement à la kératine",       desc:"Pénètre la structure de l'ongle pour le renforcer de l'intérieur. Pas juste une couche de surface." },
+  { title:"Tenue 7 jours transpiration",      desc:"Formulé pour résister à la sueur intensive, l'humidité et le frottement prolongé dans la chaussure." },
+  { title:"Finition mat. Discret. Invisible.",desc:"Sous une chaussette, ça ne se voit pas. C'est de l'équipement de protection, pas du maquillage." },
 ];
 const faqs = [
-  { q:"C'est quoi exactement BEARCLAW ?",           a:"Un coating protecteur pour ongles de pieds, formulé pour résister aux contraintes mécaniques du sport intensif. Dureté, flexibilité, tenue longue durée sous transpiration. Pas un vernis cosmétique ordinaire." },
-  { q:"Est-ce que les hommes utilisent vraiment ça ?", a:"Les hommes qui perdent des ongles après un trail, oui. Ce n'est pas un vernis — c'est un équipement de protection. Finition noire mate ou transparente. Invisible sous une chaussette." },
-  { q:"Pourquoi précommander maintenant ?",          a:"On valide la demande avant de lancer la production. Si l'objectif est atteint, on produit. Sinon, tu es remboursé intégralement. Zéro risque pour toi." },
-  { q:"Quand est-ce que je reçois le produit ?",     a:"Estimation honnête : 4 à 6 mois après la fin de la campagne. On ne promet pas ce qu'on ne peut pas tenir. Tu seras informé à chaque étape." },
+  { q:"C'est quoi exactement BEARCLAW ?",            a:"Un coating protecteur pour ongles de pieds, formulé pour résister aux contraintes mécaniques du sport intensif. Dureté, flexibilité, tenue longue durée sous transpiration. Pas un vernis cosmétique ordinaire." },
+  { q:"Est-ce que les hommes utilisent vraiment ça ?",a:"Les hommes qui perdent des ongles après un trail, oui. Ce n'est pas un vernis — c'est un équipement de protection. Finition noire mate ou transparente. Invisible sous une chaussette." },
+  { q:"Pourquoi précommander maintenant ?",           a:"On valide la demande avant de lancer la production. Si l'objectif est atteint, on produit. Sinon, tu es remboursé intégralement. Zéro risque pour toi." },
+  { q:"Quand est-ce que je reçois le produit ?",      a:"Estimation honnête : 4 à 6 mois après la fin de la campagne. On ne promet pas ce qu'on ne peut pas tenir. Tu seras informé à chaque étape." },
 ];
-
-function GoldLine() {
-  return React.createElement('div', { style:{ display:'flex', alignItems:'center', gap:10, marginBottom:22 } },
-    React.createElement('div', { style:{ width:20, height:1, background:GOLD, flexShrink:0 } }),
-    ...[]
-  );
-}
 
 function Tag({ children }) {
   return React.createElement('div', {
@@ -77,18 +70,39 @@ function Tag({ children }) {
   );
 }
 
+async function subscribe(email, sport) {
+  const response = await fetch("/api/subscribe", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, sport }),
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.message || "Erreur serveur");
+  }
+  return true;
+}
+
 function App() {
   const [email, setEmail]         = React.useState('');
   const [sport, setSport]         = React.useState('');
   const [submitted, setSubmitted] = React.useState(false);
-  const [count, setCount]         = React.useState(53);
+  const [loading, setLoading]     = React.useState(false);
+  const [error, setError]         = React.useState('');
 
-  React.useEffect(() => {
-    const t = setInterval(() => setCount(c => c + 1), 13000);
-    return () => clearInterval(t);
-  }, []);
-
-  const submit = () => { if (email) setSubmitted(true); };
+  const submit = async () => {
+    if (!email) return;
+    setLoading(true);
+    setError('');
+    try {
+      await subscribe(email, sport);
+      setSubmitted(true);
+    } catch (e) {
+      setError("Une erreur est survenue. Réessaie dans quelques instants.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const f = { fontFamily:"'Bebas Neue',Arial,sans-serif" };
   const b = { fontFamily:"'Barlow',sans-serif" };
@@ -114,7 +128,7 @@ function App() {
         <div style={{ position:'relative', zIndex:2, padding:'0 28px 72px', maxWidth:720, margin:'0 auto', width:'100%' }}>
           <div style={{ display:'inline-flex', alignItems:'center', gap:10, marginBottom:32 }}>
             <div style={{ width:28, height:1, background:GOLD }} />
-            <span style={{ fontSize:10, letterSpacing:'0.25em', color:GOLD, ...b, fontWeight:500 }}>BÊTA PRIVÉE · PLACES LIMITÉES</span>
+            <span style={{ fontSize:10, letterSpacing:'0.25em', color:GOLD, ...b, fontWeight:500 }}>EARLY ACCESS · FRANCE</span>
           </div>
           <h1 style={{ fontSize:'clamp(58px,13vw,110px)', lineHeight:0.92, fontWeight:900, letterSpacing:'0.02em', margin:'0 0 28px', textTransform:'uppercase' }}>
             PROTECT<br/>
@@ -132,12 +146,6 @@ function App() {
             <a href="#probleme" style={{ color:DIMMER, padding:'12px 0', textDecoration:'none', fontSize:11, letterSpacing:'0.12em', textTransform:'uppercase', textAlign:'center', display:'block', ...b }}>
               Comprendre le problème ↓
             </a>
-          </div>
-          <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-            <div style={{ width:8, height:8, borderRadius:'50%', background:GOLD, animation:'pulse 2s infinite', flexShrink:0 }} />
-            <span style={{ fontSize:12, color:DIMMER, ...b, letterSpacing:'0.06em' }}>
-              <strong style={{ color:'rgba(237,232,223,0.6)' }}>{count} coureurs</strong> ont déjà rejoint la liste
-            </span>
           </div>
         </div>
       </section>
@@ -228,12 +236,12 @@ function App() {
       <section id="precommande" style={{ background:`linear-gradient(160deg, #100d06 0%, ${BG} 65%)`, padding:'88px 28px', borderTop:`1px solid ${GOLD_BORDER}` }}>
         <div style={{ maxWidth:560, margin:'0 auto' }}>
           <div style={{ marginBottom:40 }}>
-            <Tag>Accès Bêta Privée</Tag>
+            <Tag>Accès Early Access</Tag>
             <h2 style={{ fontSize:'clamp(30px,6vw,48px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase', margin:'0 0 16px' }}>
               Sois parmi les premiers.<br/>Façonne le produit.
             </h2>
             <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>
-              Les précommandeurs bêta reçoivent BEARCLAW en avant-première, à prix fondateur, et participent aux tests qui valident la formule finale.
+              Les précommandeurs reçoivent BEARCLAW en avant-première, à prix fondateur, et participent aux tests qui valident la formule finale.
             </p>
           </div>
 
@@ -245,15 +253,17 @@ function App() {
               <select value={sport} onChange={e => setSport(e.target.value)}
                 style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:2, padding:'15px 18px', color:sport?TEXT:MUTED, fontSize:14, ...b, fontWeight:300, width:'100%' }}>
                 <option value="">Ton sport principal</option>
-                <option value="trail">Trail running</option>
-                <option value="marathon">Marathon / route</option>
-                <option value="triathlon">Triathlon</option>
-                <option value="football">Football</option>
-                <option value="autre">Autre</option>
+                <option value="Trail running">Trail running</option>
+                <option value="Marathon / route">Marathon / route</option>
+                <option value="Triathlon">Triathlon</option>
+                <option value="Football">Football</option>
+                <option value="Autre">Autre</option>
               </select>
-              <button onClick={submit}
-                style={{ background:GOLD, color:BG, border:'none', borderRadius:2, padding:'17px 24px', fontSize:12, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', cursor:'pointer', width:'100%', marginTop:4, ...b }}>
-                Je précommande — 19,90€ · Remboursé si non livré
+              {error && React.createElement('p', { style:{ fontSize:12, color:'#ff6b6b', ...b, margin:'4px 0' } }, error)}
+              <button onClick={submit} disabled={loading}
+                style={{ background:loading?'rgba(184,150,62,0.5)':GOLD, color:BG, border:'none', borderRadius:2, padding:'17px 24px', fontSize:12, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', cursor:loading?'not-allowed':'pointer', width:'100%', marginTop:4, ...b, display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}>
+                {loading && React.createElement('span', { style:{ display:'inline-block', width:14, height:14, border:'2px solid rgba(8,7,6,0.3)', borderTopColor:BG, borderRadius:'50%', animation:'spin 0.8s linear infinite' } })}
+                {loading ? 'Inscription en cours...' : 'Je précommande — 19,90€ · Remboursé si non livré'}
               </button>
               <p style={{ fontSize:11, color:DIMMER, lineHeight:1.6, textAlign:'center', letterSpacing:'0.04em', ...b, marginTop:6 }}>
                 Paiement sécurisé · Débité uniquement à la livraison · Remboursement intégral garanti
