@@ -57,8 +57,8 @@ const features = [
 const faqs = [
   { q:"C'est quoi exactement BEARCLAW ?",            a:"Un coating protecteur pour ongles de pieds, formulé pour résister aux contraintes mécaniques du sport intensif. Dureté, flexibilité, tenue longue durée sous transpiration. Pas un vernis cosmétique ordinaire." },
   { q:"Est-ce que les hommes utilisent vraiment ça ?",a:"Les hommes qui perdent des ongles après un trail, oui. Ce n'est pas un vernis — c'est un équipement de protection. Finition noire mate ou transparente. Invisible sous une chaussette." },
-  { q:"Pourquoi précommander maintenant ?",           a:"On valide la demande avant de lancer la production. Si l'objectif est atteint, on produit. Sinon, tu es remboursé intégralement. Zéro risque pour toi." },
-  { q:"Quand est-ce que je reçois le produit ?",      a:"Estimation honnête : 4 à 6 mois après la fin de la campagne. On ne promet pas ce qu'on ne peut pas tenir. Tu seras informé à chaque étape." },
+  { q:"Pourquoi rejoindre la liste ?",                a:"On valide la demande avant de lancer la production. Les inscrits seront les premiers informés et bénéficieront d'un prix fondateur exclusif." },
+  { q:"Quand est-ce que le produit sera disponible ?",a:"Estimation honnête : dans les 4 à 6 mois. On ne promet pas ce qu'on ne peut pas tenir. Tu seras informé à chaque étape." },
 ];
 
 function Tag({ children }) {
@@ -86,12 +86,14 @@ async function subscribe(email, sport) {
 function App() {
   const [email, setEmail]         = React.useState('');
   const [sport, setSport]         = React.useState('');
+  const [consent, setConsent]     = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [loading, setLoading]     = React.useState(false);
   const [error, setError]         = React.useState('');
 
   const submit = async () => {
-    if (!email) return;
+    if (!email) { setError("Merci d'entrer ton email."); return; }
+    if (!consent) { setError("Merci d'accepter de recevoir nos communications pour continuer."); return; }
     setLoading(true);
     setError('');
     try {
@@ -116,8 +118,8 @@ function App() {
           <div style={{ fontSize:24, fontWeight:900, letterSpacing:'0.2em' }}>BEARCLAW</div>
           <div style={{ fontSize:9, letterSpacing:'0.35em', color:GOLD, ...b, fontWeight:500, marginTop:2 }}>PROTECT YOUR CLAWS</div>
         </div>
-        <a href="#precommande" style={{ background:GOLD, color:BG, padding:'10px 20px', borderRadius:2, textDecoration:'none', fontSize:11, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', ...b }}>
-          Précommander — 19,90€
+        <a href="#liste" style={{ background:GOLD, color:BG, padding:'10px 20px', borderRadius:2, textDecoration:'none', fontSize:11, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', ...b }}>
+          Rejoindre la liste
         </a>
       </nav>
 
@@ -140,8 +142,8 @@ function App() {
             Fini les ongles noirs, les hématomes, les ongles qui tombent.
           </p>
           <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:32, maxWidth:400 }}>
-            <a href="#precommande" style={{ background:GOLD, color:BG, padding:'17px 32px', borderRadius:2, textDecoration:'none', fontSize:13, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', textAlign:'center', display:'block', ...b }}>
-              Je précommande — 19,90€
+            <a href="#liste" style={{ background:GOLD, color:BG, padding:'17px 32px', borderRadius:2, textDecoration:'none', fontSize:13, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', textAlign:'center', display:'block', ...b }}>
+              Rejoindre la liste d'attente
             </a>
             <a href="#probleme" style={{ color:DIMMER, padding:'12px 0', textDecoration:'none', fontSize:11, letterSpacing:'0.12em', textTransform:'uppercase', textAlign:'center', display:'block', ...b }}>
               Comprendre le problème ↓
@@ -232,16 +234,16 @@ function App() {
         </div>
       </div>
 
-      {/* PRÉCOMMANDE */}
-      <section id="precommande" style={{ background:`linear-gradient(160deg, #100d06 0%, ${BG} 65%)`, padding:'88px 28px', borderTop:`1px solid ${GOLD_BORDER}` }}>
+      {/* LISTE D'ATTENTE */}
+      <section id="liste" style={{ background:`linear-gradient(160deg, #100d06 0%, ${BG} 65%)`, padding:'88px 28px', borderTop:`1px solid ${GOLD_BORDER}` }}>
         <div style={{ maxWidth:560, margin:'0 auto' }}>
           <div style={{ marginBottom:40 }}>
-            <Tag>Accès Early Access</Tag>
+            <Tag>Liste d'attente</Tag>
             <h2 style={{ fontSize:'clamp(30px,6vw,48px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase', margin:'0 0 16px' }}>
               Sois parmi les premiers.<br/>Façonne le produit.
             </h2>
             <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>
-              Les précommandeurs reçoivent BEARCLAW en avant-première, à prix fondateur, et participent aux tests qui valident la formule finale.
+              BEARCLAW est en cours de développement. Laisse ton email pour être informé en avant-première et bénéficier d'un prix fondateur exclusif au lancement.
             </p>
           </div>
 
@@ -259,14 +261,25 @@ function App() {
                 <option value="Football">Football</option>
                 <option value="Autre">Autre</option>
               </select>
+
+              {/* CHECKBOX RGPD */}
+              <label style={{ display:'flex', alignItems:'flex-start', gap:12, cursor:'pointer', marginTop:4 }}>
+                <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)}
+                  style={{ marginTop:3, accentColor:GOLD, width:16, height:16, flexShrink:0, cursor:'pointer' }} />
+                <span style={{ fontSize:12, color:MUTED, lineHeight:1.6, ...b, fontWeight:300 }}>
+                  J'accepte de recevoir des informations sur BEARCLAW par email. Pas de spam — uniquement les updates produit et l'accès anticipé au lancement. Désinscription possible à tout moment.
+                </span>
+              </label>
+
               {error && React.createElement('p', { style:{ fontSize:12, color:'#ff6b6b', ...b, margin:'4px 0' } }, error)}
+
               <button onClick={submit} disabled={loading}
                 style={{ background:loading?'rgba(184,150,62,0.5)':GOLD, color:BG, border:'none', borderRadius:2, padding:'17px 24px', fontSize:12, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', cursor:loading?'not-allowed':'pointer', width:'100%', marginTop:4, ...b, display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}>
                 {loading && React.createElement('span', { style:{ display:'inline-block', width:14, height:14, border:'2px solid rgba(8,7,6,0.3)', borderTopColor:BG, borderRadius:'50%', animation:'spin 0.8s linear infinite' } })}
-                {loading ? 'Inscription en cours...' : 'Je précommande — 19,90€ · Remboursé si non livré'}
+                {loading ? 'Inscription en cours...' : 'Je rejoins la liste d\'attente'}
               </button>
               <p style={{ fontSize:11, color:DIMMER, lineHeight:1.6, textAlign:'center', letterSpacing:'0.04em', ...b, marginTop:6 }}>
-                Paiement sécurisé · Débité uniquement à la livraison · Remboursement intégral garanti
+                Aucun paiement requis · Tu seras contacté en priorité au lancement
               </p>
             </div>
           ) : (
@@ -308,7 +321,10 @@ function App() {
         <p style={{ fontSize:11, color:DIMMER, letterSpacing:'0.08em', textTransform:'uppercase', ...b, margin:'0 0 8px' }}>
           Un projet fondé par des sportifs, pour des sportifs · France · 2025
         </p>
-        <p style={{ fontSize:10, color:'rgba(237,232,223,0.12)', ...b }}>
+        <p style={{ fontSize:12, color:DIMMER, ...b, fontWeight:300, lineHeight:1.7, maxWidth:480, margin:'16px auto 8px' }}>
+          Politique de confidentialité — Les données collectées (email, sport pratiqué) sont utilisées uniquement pour t'informer de l'avancement du projet BEARCLAW et du lancement du produit. Elles ne sont jamais vendues ni partagées avec des tiers. Tu peux te désinscrire à tout moment en écrivant à <a href="mailto:contact@bearclaw.fr" style={{ color:GOLD, textDecoration:'none' }}>contact@bearclaw.fr</a>. Responsable du traitement : BEARCLAW, contact@bearclaw.fr.
+        </p>
+        <p style={{ fontSize:10, color:'rgba(237,232,223,0.12)', ...b, marginTop:16 }}>
           © 2025 BEARCLAW. Produit en cours de développement. Tous droits réservés.
         </p>
       </footer>
