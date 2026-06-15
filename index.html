@@ -38,28 +38,131 @@ const IMG_TRAIL  = "https://images.unsplash.com/photo-1594882645126-14020914d58d
 const IMG_ROCK   = "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?w=900&q=85";
 const IMG_FINISH = "https://images.unsplash.com/photo-1502224562085-639556652f33?w=900&q=85";
 
-const stats = [
-  { value:"2–14%", label:"des marathoniens perdent un ongle par saison" },
-  { value:"240M+", label:"sportifs concernés dans le monde" },
-  { value:"0",     label:"produit conçu pour ça jusqu'ici" },
-];
-const problems = [
-  { num:"01", title:"L'hématome",          desc:"Le sang s'accumule sous l'ongle après des kilomètres de frottement contre la chaussure. Ça noircit, ça gonfle, ça fait mal." },
-  { num:"02", title:"L'ongle qui tombe",   desc:"Le nail bed se décolle. L'ongle part. Long à repousser, parfois déformé. Toujours au pire moment de la saison." },
-  { num:"03", title:"L'infection qui suit",desc:"Un ongle fragilisé est une porte d'entrée pour les champignons. Le problème devient chronique et difficile à traiter." },
-];
-const features = [
-  { title:"Film protecteur technique",        desc:"Coating haute résistance qui absorbe les micro-impacts répétés sans se fissurer ni se décoller." },
-  { title:"Renforcement à la kératine",       desc:"Pénètre la structure de l'ongle pour le renforcer de l'intérieur. Pas juste une couche de surface." },
-  { title:"Tenue 7 jours transpiration",      desc:"Formulé pour résister à la sueur intensive, l'humidité et le frottement prolongé dans la chaussure." },
-  { title:"Finition mat. Discret. Invisible.",desc:"Sous une chaussette, ça ne se voit pas. C'est de l'équipement de protection, pas du maquillage." },
-];
-const faqs = [
-  { q:"C'est quoi exactement BEARCLAW ?",            a:"Un coating protecteur pour ongles de pieds, formulé pour résister aux contraintes mécaniques du sport intensif. Dureté, flexibilité, tenue longue durée sous transpiration. Pas un vernis cosmétique ordinaire." },
-  { q:"Est-ce que les hommes utilisent vraiment ça ?",a:"Les hommes qui perdent des ongles après un trail, oui. Ce n'est pas un vernis — c'est un équipement de protection. Finition noire mate ou transparente. Invisible sous une chaussette." },
-  { q:"Pourquoi rejoindre la liste ?",                a:"On valide la demande avant de lancer la production. Les inscrits seront les premiers informés et bénéficieront d'un prix fondateur exclusif." },
-  { q:"Quand est-ce que le produit sera disponible ?",a:"Estimation honnête : dans les 4 à 6 mois. On ne promet pas ce qu'on ne peut pas tenir. Tu seras informé à chaque étape." },
-];
+// ── Détection langue : français si fr, anglais sinon ──
+const isFR = navigator.language.toLowerCase().startsWith('fr');
+
+const T = {
+  fr: {
+    navCta: "Rejoindre la liste",
+    heroBadge: "EARLY ACCESS · FRANCE",
+    heroSub: "Le premier coating technique conçu pour les coureurs de trail et de running. Fini les ongles noirs, les hématomes, les ongles qui tombent.",
+    heroBtn: "Rejoindre la liste d'attente",
+    heroScroll: "Comprendre le problème ↓",
+    stats: [
+      { value:"2–14%", label:"des marathoniens perdent un ongle par saison" },
+      { value:"240M+", label:"sportifs concernés dans le monde" },
+      { value:"0",     label:"produit conçu pour ça jusqu'ici" },
+    ],
+    problemTag: "Le Problème",
+    problemTitle: "Ce qui arrive à ton pied\naprès 30 km de descente.",
+    quote: '"Presque tous les coureurs ayant un programme marathon sérieux développent au moins un ongle noir."',
+    quoteAuthor: "Jeff Galloway, coach running, 45 ans d'expérience",
+    problems: [
+      { num:"01", title:"L'hématome",          desc:"Le sang s'accumule sous l'ongle après des kilomètres de frottement contre la chaussure. Ça noircit, ça gonfle, ça fait mal." },
+      { num:"02", title:"L'ongle qui tombe",   desc:"Le nail bed se décolle. L'ongle part. Long à repousser, parfois déformé. Toujours au pire moment de la saison." },
+      { num:"03", title:"L'infection qui suit",desc:"Un ongle fragilisé est une porte d'entrée pour les champignons. Le problème devient chronique et difficile à traiter." },
+    ],
+    solutionTag: "La Solution",
+    solutionTitle: "Un coating.\nPas un vernis.",
+    solutionSub: "BEARCLAW est formulé comme un équipement de protection. La nuance est totale.",
+    features: [
+      { title:"Film protecteur technique",        desc:"Coating haute résistance qui absorbe les micro-impacts répétés sans se fissurer ni se décoller." },
+      { title:"Renforcement à la kératine",       desc:"Pénètre la structure de l'ongle pour le renforcer de l'intérieur. Pas juste une couche de surface." },
+      { title:"Tenue 7 jours transpiration",      desc:"Formulé pour résister à la sueur intensive, l'humidité et le frottement prolongé dans la chaussure." },
+      { title:"Finition mat. Discret. Invisible.",desc:"Sous une chaussette, ça ne se voit pas. C'est de l'équipement de protection, pas du maquillage." },
+    ],
+    bannerLine1: "Chaque kilomètre compte.",
+    bannerLine2: "Tes ongles aussi.",
+    waitlistTag: "Liste d'attente",
+    waitlistTitle: "Sois parmi les premiers.\nFaçonne le produit.",
+    waitlistSub: "BEARCLAW est en cours de développement. Laisse ton email pour être informé en avant-première et bénéficier d'un prix fondateur exclusif au lancement.",
+    placeholder: "ton@email.com",
+    sportLabel: "Ton sport principal",
+    sports: ["Trail running","Marathon / route","Triathlon","Football","Autre"],
+    consentText: "J'accepte de recevoir des informations sur BEARCLAW par email. Pas de spam — uniquement les updates produit et l'accès anticipé au lancement. Désinscription possible à tout moment.",
+    errorEmail: "Merci d'entrer ton email.",
+    errorConsent: "Merci d'accepter de recevoir nos communications pour continuer.",
+    errorServer: "Une erreur est survenue. Réessaie dans quelques instants.",
+    btnLoading: "Inscription en cours...",
+    btnSubmit: "Je rejoins la liste d'attente",
+    formNote: "Aucun paiement requis · Tu seras contacté en priorité au lancement",
+    successTitle: "Tu es dans la liste.",
+    successText: "On te contacte en premier dès que BEARCLAW est prêt. Partage avec tes partenaires de trail.",
+    shareBtn: "Copier le lien à partager",
+    faqTag: "FAQ",
+    faqTitle: "Questions directes,\nréponses directes.",
+    faqs: [
+      { q:"C'est quoi exactement BEARCLAW ?",            a:"Un coating protecteur pour ongles de pieds, formulé pour résister aux contraintes mécaniques du sport intensif. Dureté, flexibilité, tenue longue durée sous transpiration. Pas un vernis cosmétique ordinaire." },
+      { q:"Est-ce que les hommes utilisent vraiment ça ?",a:"Les hommes qui perdent des ongles après un trail, oui. Ce n'est pas un vernis — c'est un équipement de protection. Finition noire mate ou transparente. Invisible sous une chaussette." },
+      { q:"Pourquoi rejoindre la liste ?",                a:"On valide la demande avant de lancer la production. Les inscrits seront les premiers informés et bénéficieront d'un prix fondateur exclusif." },
+      { q:"Quand est-ce que le produit sera disponible ?",a:"Estimation honnête : dans les 4 à 6 mois. On ne promet pas ce qu'on ne peut pas tenir. Tu seras informé à chaque étape." },
+    ],
+    footerSub: "Un projet fondé par des sportifs, pour des sportifs · France · 2025",
+    privacy: "Privacy policy — Data collected (email, sport) is used solely to keep you informed about BEARCLAW's development and launch. It is never sold or shared with third parties. You can unsubscribe at any time by writing to",
+    copyright: "© 2025 BEARCLAW. Product in development. All rights reserved.",
+  },
+  en: {
+    navCta: "Join the waitlist",
+    heroBadge: "EARLY ACCESS · WORLDWIDE",
+    heroSub: "The first technical nail coating built for trail runners and endurance athletes. No more black toenails, hematomas, or lost nails.",
+    heroBtn: "Join the waitlist",
+    heroScroll: "Understand the problem ↓",
+    stats: [
+      { value:"2–14%", label:"of marathon runners lose a toenail each season" },
+      { value:"240M+", label:"athletes affected worldwide" },
+      { value:"0",     label:"products built specifically for this" },
+    ],
+    problemTag: "The Problem",
+    problemTitle: "What happens to your feet\nafter 30km of descent.",
+    quote: '"Almost every runner with a serious marathon programme develops at least one black toenail."',
+    quoteAuthor: "Jeff Galloway, running coach, 45 years of experience",
+    problems: [
+      { num:"01", title:"The hematoma",      desc:"Blood pools under the nail after miles of repeated friction against your shoe. It darkens, swells and hurts." },
+      { num:"02", title:"The nail falls off", desc:"The nail bed detaches. The nail goes. Slow to grow back, sometimes deformed. Always at the worst moment of the season." },
+      { num:"03", title:"The infection",     desc:"A weakened nail is an open door for fungal infections. The problem becomes chronic and hard to treat." },
+    ],
+    solutionTag: "The Solution",
+    solutionTitle: "A coating.\nNot nail polish.",
+    solutionSub: "BEARCLAW is formulated as protective equipment. The difference is total.",
+    features: [
+      { title:"Technical protective film",    desc:"High-resistance coating that absorbs repeated micro-impacts without cracking or peeling." },
+      { title:"Keratin reinforcement",        desc:"Penetrates the nail structure to strengthen it from the inside. Not just a surface layer." },
+      { title:"7-day sweat resistance",       desc:"Formulated to withstand intensive sweat, moisture and prolonged friction inside your shoe." },
+      { title:"Matte finish. Discreet. Invisible.", desc:"Under a sock, you can't see it. This is protective equipment, not cosmetics." },
+    ],
+    bannerLine1: "Every kilometre counts.",
+    bannerLine2: "So do your nails.",
+    waitlistTag: "Waitlist",
+    waitlistTitle: "Be among the first.\nShape the product.",
+    waitlistSub: "BEARCLAW is in development. Leave your email to be notified first and get an exclusive founder price at launch.",
+    placeholder: "your@email.com",
+    sportLabel: "Your main sport",
+    sports: ["Trail running","Marathon / road","Triathlon","Football","Other"],
+    consentText: "I agree to receive updates about BEARCLAW by email. No spam — only product news and early launch access. Unsubscribe anytime.",
+    errorEmail: "Please enter your email.",
+    errorConsent: "Please accept our communications to continue.",
+    errorServer: "Something went wrong. Please try again.",
+    btnLoading: "Signing up...",
+    btnSubmit: "Join the waitlist",
+    formNote: "No payment required · You'll be contacted first at launch",
+    successTitle: "You're on the list.",
+    successText: "We'll contact you first when BEARCLAW is ready. Share with your trail running crew.",
+    shareBtn: "Copy link to share",
+    faqTag: "FAQ",
+    faqTitle: "Straight questions,\nstraight answers.",
+    faqs: [
+      { q:"What exactly is BEARCLAW ?",          a:"A protective toenail coating formulated to withstand the mechanical demands of intense sport. Hardness, flexibility, long-lasting hold under sweat. Not ordinary nail polish." },
+      { q:"Do men really use this ?",             a:"Men who lose toenails after a trail race, yes. This is not nail polish — it's protective equipment. Matte black or clear finish. Invisible under a sock." },
+      { q:"Why join the waitlist ?",              a:"We're validating demand before launching production. Waitlist members will be first to know and receive an exclusive founder price." },
+      { q:"When will the product be available ?", a:"Honest estimate: within 4 to 6 months. We don't promise what we can't deliver. You'll be updated at every step." },
+    ],
+    footerSub: "A project built by athletes, for athletes · France · 2025",
+    privacy: "Privacy policy — Data collected (email, sport) is used solely to keep you informed about BEARCLAW's development and launch. It is never sold or shared with third parties. You can unsubscribe at any time by writing to",
+    copyright: "© 2025 BEARCLAW. Product in development. All rights reserved.",
+  }
+};
+
+const L = isFR ? T.fr : T.en;
 
 function Tag({ children }) {
   return React.createElement('div', {
@@ -78,7 +181,7 @@ async function subscribe(email, sport) {
   });
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
-    throw new Error(err.message || "Erreur serveur");
+    throw new Error(err.message || "Server error");
   }
   return true;
 }
@@ -92,15 +195,15 @@ function App() {
   const [error, setError]         = React.useState('');
 
   const submit = async () => {
-    if (!email) { setError("Merci d'entrer ton email."); return; }
-    if (!consent) { setError("Merci d'accepter de recevoir nos communications pour continuer."); return; }
+    if (!email)   { setError(L.errorEmail);   return; }
+    if (!consent) { setError(L.errorConsent); return; }
     setLoading(true);
     setError('');
     try {
       await subscribe(email, sport);
       setSubmitted(true);
     } catch (e) {
-      setError("Une erreur est survenue. Réessaie dans quelques instants.");
+      setError(L.errorServer);
     } finally {
       setLoading(false);
     }
@@ -119,7 +222,7 @@ function App() {
           <div style={{ fontSize:9, letterSpacing:'0.35em', color:GOLD, ...b, fontWeight:500, marginTop:2 }}>PROTECT YOUR CLAWS</div>
         </div>
         <a href="#liste" style={{ background:GOLD, color:BG, padding:'10px 20px', borderRadius:2, textDecoration:'none', fontSize:11, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', ...b }}>
-          Rejoindre la liste
+          {L.navCta}
         </a>
       </nav>
 
@@ -130,7 +233,7 @@ function App() {
         <div style={{ position:'relative', zIndex:2, padding:'0 28px 72px', maxWidth:720, margin:'0 auto', width:'100%' }}>
           <div style={{ display:'inline-flex', alignItems:'center', gap:10, marginBottom:32 }}>
             <div style={{ width:28, height:1, background:GOLD }} />
-            <span style={{ fontSize:10, letterSpacing:'0.25em', color:GOLD, ...b, fontWeight:500 }}>EARLY ACCESS · FRANCE</span>
+            <span style={{ fontSize:10, letterSpacing:'0.25em', color:GOLD, ...b, fontWeight:500 }}>{L.heroBadge}</span>
           </div>
           <h1 style={{ fontSize:'clamp(58px,13vw,110px)', lineHeight:0.92, fontWeight:900, letterSpacing:'0.02em', margin:'0 0 28px', textTransform:'uppercase' }}>
             PROTECT<br/>
@@ -138,15 +241,14 @@ function App() {
             CLAWS.
           </h1>
           <p style={{ fontSize:16, lineHeight:1.7, color:MUTED, maxWidth:460, margin:'0 0 40px', ...b, fontWeight:300 }}>
-            Le premier coating technique conçu pour les coureurs de trail et de running.
-            Fini les ongles noirs, les hématomes, les ongles qui tombent.
+            {L.heroSub}
           </p>
           <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:32, maxWidth:400 }}>
             <a href="#liste" style={{ background:GOLD, color:BG, padding:'17px 32px', borderRadius:2, textDecoration:'none', fontSize:13, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', textAlign:'center', display:'block', ...b }}>
-              Rejoindre la liste d'attente
+              {L.heroBtn}
             </a>
             <a href="#probleme" style={{ color:DIMMER, padding:'12px 0', textDecoration:'none', fontSize:11, letterSpacing:'0.12em', textTransform:'uppercase', textAlign:'center', display:'block', ...b }}>
-              Comprendre le problème ↓
+              {L.heroScroll}
             </a>
           </div>
         </div>
@@ -154,7 +256,7 @@ function App() {
 
       {/* STATS */}
       <div style={{ borderTop:'1px solid rgba(255,255,255,0.06)', borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
-        {stats.map((s,i) => (
+        {L.stats.map((s,i) => (
           <div key={i} style={{ padding:'32px 28px', borderBottom:'1px solid rgba(255,255,255,0.04)', maxWidth:720, margin:'0 auto', width:'100%' }}>
             <div style={{ fontSize:'clamp(44px,9vw,72px)', fontWeight:900, color:GOLD, letterSpacing:'-0.02em', lineHeight:1, marginBottom:8 }}>{s.value}</div>
             <div style={{ fontSize:11, color:MUTED, letterSpacing:'0.12em', textTransform:'uppercase', ...b, fontWeight:400 }}>{s.label}</div>
@@ -165,9 +267,9 @@ function App() {
       {/* PROBLÈME */}
       <section id="probleme" style={{ padding:'88px 28px', maxWidth:720, margin:'0 auto' }}>
         <div style={{ marginBottom:52 }}>
-          <Tag>Le Problème</Tag>
+          <Tag>{L.problemTag}</Tag>
           <h2 style={{ fontSize:'clamp(30px,6vw,52px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase' }}>
-            Ce qui arrive à ton pied<br/>après 30 km de descente.
+            {L.problemTitle.split('\n').map((line,i) => React.createElement(React.Fragment, {key:i}, line, i===0 && React.createElement('br')))}
           </h2>
         </div>
         <div style={{ position:'relative', borderRadius:4, overflow:'hidden', marginBottom:52, aspectRatio:'16/7' }}>
@@ -175,13 +277,11 @@ function App() {
           <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(8,7,6,0.9) 0%, rgba(8,7,6,0.1) 60%)' }} />
           <div style={{ position:'absolute', bottom:24, left:28, right:28 }}>
             <div style={{ width:24, height:1, background:GOLD, marginBottom:12 }} />
-            <p style={{ fontSize:14, lineHeight:1.6, color:'rgba(237,232,223,0.7)', fontStyle:'italic', ...b, fontWeight:300 }}>
-              "Presque tous les coureurs ayant un programme marathon sérieux développent au moins un ongle noir."
-            </p>
-            <p style={{ fontSize:10, color:MUTED, letterSpacing:'0.12em', textTransform:'uppercase', ...b, marginTop:8 }}>— Jeff Galloway, coach running, 45 ans d'expérience</p>
+            <p style={{ fontSize:14, lineHeight:1.6, color:'rgba(237,232,223,0.7)', fontStyle:'italic', ...b, fontWeight:300 }}>{L.quote}</p>
+            <p style={{ fontSize:10, color:MUTED, letterSpacing:'0.12em', textTransform:'uppercase', ...b, marginTop:8 }}>{L.quoteAuthor}</p>
           </div>
         </div>
-        {problems.map((p,i) => (
+        {L.problems.map((p,i) => (
           <div key={i} style={{ display:'flex', gap:28, alignItems:'flex-start', padding:'28px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
             <div style={{ fontSize:10, fontWeight:700, color:GOLD, letterSpacing:'0.15em', minWidth:28, paddingTop:5, ...b }}>{p.num}</div>
             <div>
@@ -196,18 +296,16 @@ function App() {
       <section style={{ background:BG2, padding:'88px 0', borderTop:'1px solid rgba(255,255,255,0.04)', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
         <div style={{ maxWidth:720, margin:'0 auto', padding:'0 28px' }}>
           <div style={{ marginBottom:52 }}>
-            <Tag>La Solution</Tag>
+            <Tag>{L.solutionTag}</Tag>
             <h2 style={{ fontSize:'clamp(30px,6vw,52px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase', margin:'0 0 16px' }}>
-              Un coating.<br/>Pas un vernis.
+              {L.solutionTitle.split('\n').map((line,i) => React.createElement(React.Fragment, {key:i}, line, i===0 && React.createElement('br')))}
             </h2>
-            <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>
-              BEARCLAW est formulé comme un équipement de protection. La nuance est totale.
-            </p>
+            <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>{L.solutionSub}</p>
           </div>
           <div style={{ borderRadius:4, overflow:'hidden', aspectRatio:'16/9', marginBottom:40 }}>
-            <img src={IMG_ROCK} alt="Trail montagne" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+            <img src={IMG_ROCK} alt="Trail mountain" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
           </div>
-          {features.map((feat,i) => (
+          {L.features.map((feat,i) => (
             <div key={i} style={{ display:'flex', gap:28, alignItems:'flex-start', padding:'22px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
               <div style={{ fontSize:10, fontWeight:700, color:GOLD, letterSpacing:'0.15em', minWidth:28, paddingTop:4, ...b }}>{String(i+1).padStart(2,'0')}</div>
               <div>
@@ -221,14 +319,14 @@ function App() {
 
       {/* BANNER */}
       <div style={{ position:'relative', aspectRatio:'21/8', overflow:'hidden' }}>
-        <img src={IMG_FINISH} alt="Coureur finish" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+        <img src={IMG_FINISH} alt="Runner at finish" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
         <div style={{ position:'absolute', inset:0, background:'linear-gradient(to right, rgba(8,7,6,0.88) 0%, rgba(8,7,6,0.25) 100%)' }} />
         <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', padding:'0 32px' }}>
           <div>
             <div style={{ width:24, height:1, background:GOLD, marginBottom:16 }} />
             <div style={{ fontSize:'clamp(22px,5vw,44px)', fontWeight:900, lineHeight:1.1, letterSpacing:'0.04em', textTransform:'uppercase', maxWidth:380 }}>
-              Chaque kilomètre compte.<br/>
-              <span style={{ color:GOLD }}>Tes ongles aussi.</span>
+              {L.bannerLine1}<br/>
+              <span style={{ color:GOLD }}>{L.bannerLine2}</span>
             </div>
           </div>
         </div>
@@ -238,37 +336,28 @@ function App() {
       <section id="liste" style={{ background:`linear-gradient(160deg, #100d06 0%, ${BG} 65%)`, padding:'88px 28px', borderTop:`1px solid ${GOLD_BORDER}` }}>
         <div style={{ maxWidth:560, margin:'0 auto' }}>
           <div style={{ marginBottom:40 }}>
-            <Tag>Liste d'attente</Tag>
+            <Tag>{L.waitlistTag}</Tag>
             <h2 style={{ fontSize:'clamp(30px,6vw,48px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase', margin:'0 0 16px' }}>
-              Sois parmi les premiers.<br/>Façonne le produit.
+              {L.waitlistTitle.split('\n').map((line,i) => React.createElement(React.Fragment, {key:i}, line, i===0 && React.createElement('br')))}
             </h2>
-            <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>
-              BEARCLAW est en cours de développement. Laisse ton email pour être informé en avant-première et bénéficier d'un prix fondateur exclusif au lancement.
-            </p>
+            <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>{L.waitlistSub}</p>
           </div>
 
           {!submitted ? (
             <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-              <input type="email" placeholder="ton@email.com" value={email}
+              <input type="email" placeholder={L.placeholder} value={email}
                 onChange={e => setEmail(e.target.value)}
                 style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:2, padding:'15px 18px', color:TEXT, fontSize:14, ...b, fontWeight:300, width:'100%' }} />
               <select value={sport} onChange={e => setSport(e.target.value)}
                 style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:2, padding:'15px 18px', color:sport?TEXT:MUTED, fontSize:14, ...b, fontWeight:300, width:'100%' }}>
-                <option value="">Ton sport principal</option>
-                <option value="Trail running">Trail running</option>
-                <option value="Marathon / route">Marathon / route</option>
-                <option value="Triathlon">Triathlon</option>
-                <option value="Football">Football</option>
-                <option value="Autre">Autre</option>
+                <option value="">{L.sportLabel}</option>
+                {L.sports.map((s,i) => React.createElement('option', {key:i, value:s}, s))}
               </select>
 
-              {/* CHECKBOX RGPD */}
               <label style={{ display:'flex', alignItems:'flex-start', gap:12, cursor:'pointer', marginTop:4 }}>
                 <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)}
                   style={{ marginTop:3, accentColor:GOLD, width:16, height:16, flexShrink:0, cursor:'pointer' }} />
-                <span style={{ fontSize:12, color:MUTED, lineHeight:1.6, ...b, fontWeight:300 }}>
-                  J'accepte de recevoir des informations sur BEARCLAW par email. Pas de spam — uniquement les updates produit et l'accès anticipé au lancement. Désinscription possible à tout moment.
-                </span>
+                <span style={{ fontSize:12, color:MUTED, lineHeight:1.6, ...b, fontWeight:300 }}>{L.consentText}</span>
               </label>
 
               {error && React.createElement('p', { style:{ fontSize:12, color:'#ff6b6b', ...b, margin:'4px 0' } }, error)}
@@ -276,22 +365,20 @@ function App() {
               <button onClick={submit} disabled={loading}
                 style={{ background:loading?'rgba(184,150,62,0.5)':GOLD, color:BG, border:'none', borderRadius:2, padding:'17px 24px', fontSize:12, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', cursor:loading?'not-allowed':'pointer', width:'100%', marginTop:4, ...b, display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}>
                 {loading && React.createElement('span', { style:{ display:'inline-block', width:14, height:14, border:'2px solid rgba(8,7,6,0.3)', borderTopColor:BG, borderRadius:'50%', animation:'spin 0.8s linear infinite' } })}
-                {loading ? 'Inscription en cours...' : 'Je rejoins la liste d\'attente'}
+                {loading ? L.btnLoading : L.btnSubmit}
               </button>
               <p style={{ fontSize:11, color:DIMMER, lineHeight:1.6, textAlign:'center', letterSpacing:'0.04em', ...b, marginTop:6 }}>
-                Aucun paiement requis · Tu seras contacté en priorité au lancement
+                {L.formNote}
               </p>
             </div>
           ) : (
             <div style={{ background:GOLD_DIM, border:`1px solid ${GOLD_BORDER}`, borderRadius:4, padding:'40px 28px', textAlign:'center' }}>
               <div style={{ width:52, height:52, borderRadius:'50%', background:GOLD, color:BG, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', fontSize:22, fontWeight:900 }}>✓</div>
-              <h3 style={{ fontSize:22, fontWeight:900, margin:'0 0 12px', letterSpacing:'0.08em', textTransform:'uppercase' }}>Tu es dans la liste.</h3>
-              <p style={{ fontSize:14, color:MUTED, lineHeight:1.65, margin:'0 0 24px', ...b, fontWeight:300 }}>
-                On te contacte en premier dès que BEARCLAW est prêt. Partage avec tes partenaires de trail.
-              </p>
+              <h3 style={{ fontSize:22, fontWeight:900, margin:'0 0 12px', letterSpacing:'0.08em', textTransform:'uppercase' }}>{L.successTitle}</h3>
+              <p style={{ fontSize:14, color:MUTED, lineHeight:1.65, margin:'0 0 24px', ...b, fontWeight:300 }}>{L.successText}</p>
               <button onClick={() => navigator.clipboard?.writeText(window.location.href)}
                 style={{ background:'transparent', border:`1px solid ${GOLD_BORDER}`, color:GOLD, padding:'12px 24px', borderRadius:2, fontSize:11, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', cursor:'pointer', ...b }}>
-                Copier le lien à partager
+                {L.shareBtn}
               </button>
             </div>
           )}
@@ -301,12 +388,12 @@ function App() {
       {/* FAQ */}
       <section style={{ padding:'88px 28px', maxWidth:720, margin:'0 auto' }}>
         <div style={{ marginBottom:52 }}>
-          <Tag>FAQ</Tag>
+          <Tag>{L.faqTag}</Tag>
           <h2 style={{ fontSize:'clamp(30px,6vw,52px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase' }}>
-            Questions directes,<br/>réponses directes.
+            {L.faqTitle.split('\n').map((line,i) => React.createElement(React.Fragment, {key:i}, line, i===0 && React.createElement('br')))}
           </h2>
         </div>
-        {faqs.map((faq,i) => (
+        {L.faqs.map((faq,i) => (
           <div key={i} style={{ padding:'28px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
             <h3 style={{ fontSize:'clamp(16px,3vw,20px)', fontWeight:900, margin:'0 0 12px', letterSpacing:'0.04em', textTransform:'uppercase' }}>{faq.q}</h3>
             <p style={{ fontSize:14, color:MUTED, lineHeight:1.7, margin:0, ...b, fontWeight:300 }}>{faq.a}</p>
@@ -318,15 +405,11 @@ function App() {
       <footer style={{ borderTop:'1px solid rgba(255,255,255,0.05)', padding:'48px 28px', textAlign:'center' }}>
         <div style={{ fontSize:24, fontWeight:900, letterSpacing:'0.2em', marginBottom:6 }}>BEARCLAW</div>
         <div style={{ fontSize:9, letterSpacing:'0.35em', color:GOLD, ...b, fontWeight:500, marginBottom:20 }}>PROTECT YOUR CLAWS</div>
-        <p style={{ fontSize:11, color:DIMMER, letterSpacing:'0.08em', textTransform:'uppercase', ...b, margin:'0 0 8px' }}>
-          Un projet fondé par des sportifs, pour des sportifs · France · 2025
-        </p>
+        <p style={{ fontSize:11, color:DIMMER, letterSpacing:'0.08em', textTransform:'uppercase', ...b, margin:'0 0 8px' }}>{L.footerSub}</p>
         <p style={{ fontSize:12, color:DIMMER, ...b, fontWeight:300, lineHeight:1.7, maxWidth:480, margin:'16px auto 8px' }}>
-          Politique de confidentialité — Les données collectées (email, sport pratiqué) sont utilisées uniquement pour t'informer de l'avancement du projet BEARCLAW et du lancement du produit. Elles ne sont jamais vendues ni partagées avec des tiers. Tu peux te désinscrire à tout moment en écrivant à <a href="mailto:contact@bearclaw.fr" style={{ color:GOLD, textDecoration:'none' }}>contact@bearclaw.fr</a>. Responsable du traitement : BEARCLAW, contact@bearclaw.fr.
+          {L.privacy} <a href="mailto:contact@bearclaw.fr" style={{ color:GOLD, textDecoration:'none' }}>contact@bearclaw.fr</a>. Responsable du traitement : BEARCLAW, contact@bearclaw.fr.
         </p>
-        <p style={{ fontSize:10, color:'rgba(237,232,223,0.12)', ...b, marginTop:16 }}>
-          © 2025 BEARCLAW. Produit en cours de développement. Tous droits réservés.
-        </p>
+        <p style={{ fontSize:10, color:'rgba(237,232,223,0.12)', ...b, marginTop:16 }}>{L.copyright}</p>
       </footer>
 
     </div>
