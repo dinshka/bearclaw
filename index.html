@@ -4,11 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BEARCLAW — Protect Your Claws</title>
-  <meta name="description" content="Le premier coating technique conçu pour les coureurs de trail et de running. Fini les ongles noirs, les hématomes, les ongles qui tombent." />
+  <meta name="description" content="Le premier coating technique pour les coureurs de trail. Fini les ongles noirs." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet" />
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PN5L8K2B');</script>
+  <!-- End Google Tag Manager -->
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.23.10/babel.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,9 +25,19 @@
     input::placeholder { color: rgba(237,232,223,0.35); }
     input:focus, select:focus { outline: none; border-color: rgba(184,150,62,0.4) !important; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .lang-btn { background: none; border: 1px solid rgba(255,255,255,0.15); border-radius: 3px; cursor: pointer; padding: 5px 10px; display: flex; align-items: center; gap: 6px; transition: border-color 0.2s; }
+    .lang-btn:hover { border-color: rgba(184,150,62,0.5); }
+    .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 6px; background: #1a1814; border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; z-index: 200; min-width: 120px; }
+    .lang-option { padding: 10px 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.15s; }
+    .lang-option:hover { background: rgba(184,150,62,0.1); }
   </style>
 </head>
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PN5L8K2B"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <div id="root"></div>
   <script type="text/babel">
 
@@ -38,37 +55,148 @@ const IMG_TRAIL  = "https://images.unsplash.com/photo-1594882645126-14020914d58d
 const IMG_ROCK   = "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?w=900&q=85";
 const IMG_FINISH = "https://images.unsplash.com/photo-1502224562085-639556652f33?w=900&q=85";
 
-const stats = [
-  { value:"2–14%", label:"des marathoniens perdent un ongle par saison" },
-  { value:"240M+", label:"sportifs concernés dans le monde" },
-  { value:"0",     label:"produit conçu pour ça jusqu'ici" },
-];
-const problems = [
-  { num:"01", title:"L'hématome",          desc:"Le sang s'accumule sous l'ongle après des kilomètres de frottement contre la chaussure. Ça noircit, ça gonfle, ça fait mal." },
-  { num:"02", title:"L'ongle qui tombe",   desc:"Le nail bed se décolle. L'ongle part. Long à repousser, parfois déformé. Toujours au pire moment de la saison." },
-  { num:"03", title:"L'infection qui suit",desc:"Un ongle fragilisé est une porte d'entrée pour les champignons. Le problème devient chronique et difficile à traiter." },
-];
-const features = [
-  { title:"Film protecteur technique",        desc:"Coating haute résistance qui absorbe les micro-impacts répétés sans se fissurer ni se décoller." },
-  { title:"Renforcement à la kératine",       desc:"Pénètre la structure de l'ongle pour le renforcer de l'intérieur. Pas juste une couche de surface." },
-  { title:"Tenue 7 jours transpiration",      desc:"Formulé pour résister à la sueur intensive, l'humidité et le frottement prolongé dans la chaussure." },
-  { title:"Finition mat. Discret. Invisible.",desc:"Sous une chaussette, ça ne se voit pas. C'est de l'équipement de protection, pas du maquillage." },
-];
-const faqs = [
-  { q:"C'est quoi exactement BEARCLAW ?",            a:"Un coating protecteur pour ongles de pieds, formulé pour résister aux contraintes mécaniques du sport intensif. Dureté, flexibilité, tenue longue durée sous transpiration. Pas un vernis cosmétique ordinaire." },
-  { q:"Est-ce que les hommes utilisent vraiment ça ?",a:"Les hommes qui perdent des ongles après un trail, oui. Ce n'est pas un vernis — c'est un équipement de protection. Finition noire mate ou transparente. Invisible sous une chaussette." },
-  { q:"Pourquoi rejoindre la liste ?",                a:"On valide la demande avant de lancer la production. Les inscrits seront les premiers informés et bénéficieront d'un prix fondateur exclusif." },
-  { q:"Quand est-ce que le produit sera disponible ?",a:"Estimation honnête : dans les 4 à 6 mois. On ne promet pas ce qu'on ne peut pas tenir. Tu seras informé à chaque étape." },
-];
-
-function Tag({ children }) {
-  return React.createElement('div', {
-    style:{ display:'inline-flex', alignItems:'center', gap:10, marginBottom:22 }
+// ── Toutes les chaines en variables pour eviter les apostrophes dans le JSX ──
+const C = {
+  fr: {
+    htmlLang: "fr",
+    navCta: "Rejoindre la liste",
+    heroBadge: "EARLY ACCESS \u00b7 FRANCE",
+    heroSub: "Le premier coating technique pour les coureurs de trail et de running. Fini les ongles noirs, les hematomes, les ongles qui tombent.",
+    heroBtn: "Rejoindre la liste d\u2019attente",
+    heroScroll: "Comprendre le probl\u00e8me \u2193",
+    stats: [
+      { value:"2\u201314%", label:"des marathoniens perdent un ongle par saison" },
+      { value:"240M+",  label:"sportifs concern\u00e9s dans le monde" },
+      { value:"0",      label:"produit con\u00e7u pour \u00e7a jusqu\u2019ici" },
+    ],
+    problemTag: "Le Probl\u00e8me",
+    problemTitle1: "Ce qui arrive \u00e0 ton pied",
+    problemTitle2: "apr\u00e8s 30 km de descente.",
+    quote: "\u201cPreque tous les coureurs ayant un programme marathon s\u00e9rieux d\u00e9veloppent au moins un ongle noir.\u201d",
+    quoteAuthor: "Jeff Galloway, coach running, 45 ans d\u2019exp\u00e9rience",
+    problems: [
+      { num:"01", title:"L\u2019h\u00e9matome",         desc:"Le sang s\u2019accumule sous l\u2019ongle apr\u00e8s des kilom\u00e8tres de frottement. \u00c7a noircit, \u00e7a gonfle, \u00e7a fait mal." },
+      { num:"02", title:"L\u2019ongle qui tombe",  desc:"Le nail bed se d\u00e9colle. L\u2019ongle part. Long \u00e0 repousser, parfois d\u00e9form\u00e9. Toujours au pire moment de la saison." },
+      { num:"03", title:"L\u2019infection qui suit",desc:"Un ongle fragilit\u00e9 est une porte d\u2019entr\u00e9e pour les champignons. Le probl\u00e8me devient chronique." },
+    ],
+    solutionTag: "La Solution",
+    solutionTitle1: "Un coating.",
+    solutionTitle2: "Pas un vernis.",
+    solutionSub: "BEARCLAW est formul\u00e9 comme un \u00e9quipement de protection. La nuance est totale.",
+    features: [
+      { title:"Film protecteur technique",         desc:"Coating haute r\u00e9sistance qui absorbe les micro-impacts sans se fissurer ni se d\u00e9coller." },
+      { title:"Renforcement \u00e0 la k\u00e9ratine",      desc:"P\u00e9n\u00e8tre la structure de l\u2019ongle pour le renforcer de l\u2019int\u00e9rieur. Pas juste une couche de surface." },
+      { title:"Tenue 7 jours transpiration",       desc:"Formul\u00e9 pour r\u00e9sister \u00e0 la sueur intensive, l\u2019humidit\u00e9 et le frottement prolong\u00e9 dans la chaussure." },
+      { title:"Finition mat. Discret. Invisible.", desc:"Sous une chaussette, \u00e7a ne se voit pas. C\u2019est de l\u2019\u00e9quipement de protection, pas du maquillage." },
+    ],
+    banner1: "Chaque kilom\u00e8tre compte.",
+    banner2: "Tes ongles aussi.",
+    waitlistTag: "Liste d\u2019attente",
+    waitlistTitle1: "Sois parmi les premiers.",
+    waitlistTitle2: "Fa\u00e7onne le produit.",
+    waitlistSub: "BEARCLAW est en cours de d\u00e9veloppement. Laisse ton email pour \u00eatre inform\u00e9 en avant-premi\u00e8re et b\u00e9n\u00e9ficier d\u2019un prix fondateur exclusif.",
+    emailPlaceholder: "ton@email.com",
+    sportPlaceholder: "Ton sport principal",
+    sports: ["Trail running","Marathon / route","Triathlon","Football","Autre"],
+    consentText: "J\u2019accepte de recevoir des informations sur BEARCLAW par email. Pas de spam \u2014 uniquement les updates produit. D\u00e9sinscription possible \u00e0 tout moment.",
+    errEmail: "Merci d\u2019entrer ton email.",
+    errConsent: "Merci d\u2019accepter nos communications pour continuer.",
+    errServer: "Une erreur est survenue. R\u00e9essaie dans quelques instants.",
+    btnLoading: "Inscription en cours...",
+    btnSubmit: "Je rejoins la liste d\u2019attente",
+    formNote: "Aucun paiement requis \u00b7 Tu seras contact\u00e9 en priorit\u00e9 au lancement",
+    successTitle: "Tu es dans la liste.",
+    successText: "On te contacte en premier d\u00e8s que BEARCLAW est pr\u00eat. Partage avec tes partenaires de trail.",
+    shareBtn: "Copier le lien \u00e0 partager",
+    faqTag: "FAQ",
+    faqTitle1: "Questions directes,",
+    faqTitle2: "r\u00e9ponses directes.",
+    faqs: [
+      { q:"C\u2019est quoi exactement BEARCLAW ?",             a:"Un coating protecteur pour ongles de pieds, formul\u00e9 pour r\u00e9sister aux contraintes m\u00e9caniques du sport intensif. Pas un vernis cosm\u00e9tique ordinaire." },
+      { q:"Est-ce que les hommes utilisent vraiment \u00e7a ?", a:"Les hommes qui perdent des ongles apr\u00e8s un trail, oui. Ce n\u2019est pas un vernis \u2014 c\u2019est un \u00e9quipement de protection. Invisible sous une chaussette." },
+      { q:"Pourquoi rejoindre la liste ?",                     a:"On valide la demande avant de lancer la production. Les inscrits b\u00e9n\u00e9ficieront d\u2019un prix fondateur exclusif." },
+      { q:"Quand est-ce que le produit sera disponible ?",     a:"Estimation honn\u00eate : dans les 4 \u00e0 6 mois. Tu seras inform\u00e9 \u00e0 chaque \u00e9tape." },
+    ],
+    footerSub: "Un projet fond\u00e9 par des sportifs, pour des sportifs \u00b7 France \u00b7 2025",
+    privacyText: "Politique de confidentialit\u00e9 \u2014 Les donn\u00e9es collect\u00e9es sont utilis\u00e9es uniquement pour t\u2019informer du lancement de BEARCLAW. Jamais vendues ni partag\u00e9es. D\u00e9sinscription via",
+    copyright: "\u00a9 2025 BEARCLAW. Produit en cours de d\u00e9veloppement. Tous droits r\u00e9serv\u00e9s.",
+    langLabel: "FR",
+    langFlag: "\ud83c\uddeb\ud83c\uddf7",
+    otherLang: "EN",
+    otherFlag: "\ud83c\uddec\ud83c\udde7",
   },
-    React.createElement('div', { style:{ width:20, height:1, background:GOLD, flexShrink:0 } }),
-    React.createElement('span', { style:{ fontSize:10, letterSpacing:'0.25em', color:GOLD, fontFamily:"'Barlow',sans-serif", fontWeight:500, textTransform:'uppercase' } }, children)
-  );
-}
+  en: {
+    htmlLang: "en",
+    navCta: "Join the waitlist",
+    heroBadge: "EARLY ACCESS \u00b7 WORLDWIDE",
+    heroSub: "The first technical nail coating built for trail runners and endurance athletes. No more black toenails, hematomas, or lost nails.",
+    heroBtn: "Join the waitlist",
+    heroScroll: "Understand the problem \u2193",
+    stats: [
+      { value:"2\u201314%", label:"of marathon runners lose a toenail each season" },
+      { value:"240M+",  label:"athletes affected worldwide" },
+      { value:"0",      label:"products built specifically for this" },
+    ],
+    problemTag: "The Problem",
+    problemTitle1: "What happens to your feet",
+    problemTitle2: "after 30km of descent.",
+    quote: "\u201cAlmost every runner with a serious marathon programme develops at least one black toenail.\u201d",
+    quoteAuthor: "Jeff Galloway, running coach, 45 years of experience",
+    problems: [
+      { num:"01", title:"The hematoma",       desc:"Blood pools under the nail after miles of repeated friction against your shoe. It darkens, swells and hurts." },
+      { num:"02", title:"The nail falls off",  desc:"The nail bed detaches. The nail goes. Slow to grow back, sometimes deformed. Always at the worst moment of the season." },
+      { num:"03", title:"The infection",       desc:"A weakened nail is an open door for fungal infections. The problem becomes chronic and hard to treat." },
+    ],
+    solutionTag: "The Solution",
+    solutionTitle1: "A coating.",
+    solutionTitle2: "Not nail polish.",
+    solutionSub: "BEARCLAW is formulated as protective equipment. The difference is total.",
+    features: [
+      { title:"Technical protective film",     desc:"High-resistance coating that absorbs repeated micro-impacts without cracking or peeling." },
+      { title:"Keratin reinforcement",         desc:"Penetrates the nail structure to strengthen it from the inside. Not just a surface layer." },
+      { title:"7-day sweat resistance",        desc:"Formulated to withstand intensive sweat, moisture and prolonged friction inside your shoe." },
+      { title:"Matte finish. Discreet. Invisible.", desc:"Under a sock, you cannot see it. This is protective equipment, not cosmetics." },
+    ],
+    banner1: "Every kilometre counts.",
+    banner2: "So do your nails.",
+    waitlistTag: "Waitlist",
+    waitlistTitle1: "Be among the first.",
+    waitlistTitle2: "Shape the product.",
+    waitlistSub: "BEARCLAW is in development. Leave your email to be notified first and get an exclusive founder price at launch.",
+    emailPlaceholder: "your@email.com",
+    sportPlaceholder: "Your main sport",
+    sports: ["Trail running","Marathon / road","Triathlon","Football","Other"],
+    consentText: "I agree to receive updates about BEARCLAW by email. No spam \u2014 only product news and early access. Unsubscribe anytime.",
+    errEmail: "Please enter your email.",
+    errConsent: "Please accept our communications to continue.",
+    errServer: "Something went wrong. Please try again.",
+    btnLoading: "Signing up...",
+    btnSubmit: "Join the waitlist",
+    formNote: "No payment required \u00b7 You will be contacted first at launch",
+    successTitle: "You are on the list.",
+    successText: "We will contact you first when BEARCLAW is ready. Share with your trail running crew.",
+    shareBtn: "Copy link to share",
+    faqTag: "FAQ",
+    faqTitle1: "Straight questions,",
+    faqTitle2: "straight answers.",
+    faqs: [
+      { q:"What exactly is BEARCLAW ?",           a:"A protective toenail coating formulated to withstand the mechanical demands of intense sport. Hardness, flexibility, long-lasting hold under sweat. Not ordinary nail polish." },
+      { q:"Do men really use this ?",              a:"Men who lose toenails after a trail race, yes. This is not nail polish \u2014 it is protective equipment. Invisible under a sock." },
+      { q:"Why join the waitlist ?",               a:"We are validating demand before launching production. Waitlist members will receive an exclusive founder price." },
+      { q:"When will the product be available ?",  a:"Honest estimate: within 4 to 6 months. You will be updated at every step." },
+    ],
+    footerSub: "A project built by athletes, for athletes \u00b7 France \u00b7 2025",
+    privacyText: "Privacy policy \u2014 Data collected is used solely to keep you informed about the BEARCLAW launch. Never sold or shared. Unsubscribe via",
+    copyright: "\u00a9 2025 BEARCLAW. Product in development. All rights reserved.",
+    langLabel: "EN",
+    langFlag: "\ud83c\uddec\ud83c\udde7",
+    otherLang: "FR",
+    otherFlag: "\ud83c\uddeb\ud83c\uddf7",
+  }
+};
+
+const browserLang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
+const defaultLang = browserLang.startsWith("fr") ? "fr" : "en";
 
 async function subscribe(email, sport) {
   const response = await fetch("/api/subscribe", {
@@ -78,249 +206,271 @@ async function subscribe(email, sport) {
   });
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
-    throw new Error(err.message || "Erreur serveur");
+    throw new Error(err.message || "Server error");
   }
   return true;
 }
 
+function Tag({ children }) {
+  return React.createElement("div", {
+    style:{ display:"inline-flex", alignItems:"center", gap:10, marginBottom:22 }
+  },
+    React.createElement("div", { style:{ width:20, height:1, background:GOLD, flexShrink:0 } }),
+    React.createElement("span", { style:{ fontSize:10, letterSpacing:"0.25em", color:GOLD, fontFamily:"'Barlow',sans-serif", fontWeight:500, textTransform:"uppercase" } }, children)
+  );
+}
+
+function LangSwitcher({ lang, setLang }) {
+  const [open, setOpen] = React.useState(false);
+  const t = C[lang];
+  const other = lang === "fr" ? "en" : "fr";
+  const ot = C[other];
+  const b = { fontFamily:"'Barlow',sans-serif" };
+
+  return React.createElement("div", { style:{ position:"relative" } },
+    React.createElement("button", {
+      className: "lang-btn",
+      onClick: () => setOpen(!open),
+      style:{ color:TEXT, ...b, fontSize:12, fontWeight:600, letterSpacing:"0.08em" }
+    },
+      React.createElement("span", null, t.langFlag),
+      React.createElement("span", null, t.langLabel),
+      React.createElement("span", { style:{ fontSize:9, opacity:0.5 } }, "\u25bc")
+    ),
+    open && React.createElement("div", { className:"lang-dropdown" },
+      React.createElement("div", {
+        className: "lang-option",
+        onClick: () => { setOpen(false); }
+      },
+        React.createElement("span", null, t.langFlag),
+        React.createElement("span", { style:{ color:GOLD, fontSize:12, ...b, fontWeight:600 } }, t.langLabel)
+      ),
+      React.createElement("div", {
+        className: "lang-option",
+        onClick: () => { setLang(other); setOpen(false); }
+      },
+        React.createElement("span", null, ot.langFlag),
+        React.createElement("span", { style:{ color:TEXT, fontSize:12, ...b } }, ot.langLabel)
+      )
+    )
+  );
+}
+
 function App() {
-  const [email, setEmail]         = React.useState('');
-  const [sport, setSport]         = React.useState('');
+  const [lang, setLang]           = React.useState(defaultLang);
+  const [email, setEmail]         = React.useState("");
+  const [sport, setSport]         = React.useState("");
   const [consent, setConsent]     = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [loading, setLoading]     = React.useState(false);
-  const [error, setError]         = React.useState('');
+  const [error, setError]         = React.useState("");
+
+  const t = C[lang];
+  const f = { fontFamily:"'Bebas Neue',Arial,sans-serif" };
+  const b = { fontFamily:"'Barlow',sans-serif" };
+
+  React.useEffect(() => {
+    document.documentElement.lang = t.htmlLang;
+  }, [lang]);
 
   const submit = async () => {
-    if (!email) { setError("Merci d'entrer ton email."); return; }
-    if (!consent) { setError("Merci d'accepter de recevoir nos communications pour continuer."); return; }
+    if (!email)   { setError(t.errEmail);   return; }
+    if (!consent) { setError(t.errConsent); return; }
     setLoading(true);
-    setError('');
+    setError("");
     try {
       await subscribe(email, sport);
       setSubmitted(true);
     } catch (e) {
-      setError("Une erreur est survenue. Réessaie dans quelques instants.");
+      setError(t.errServer);
     } finally {
       setLoading(false);
     }
   };
 
-  const f = { fontFamily:"'Bebas Neue',Arial,sans-serif" };
-  const b = { fontFamily:"'Barlow',sans-serif" };
+  return React.createElement("div", { style:{ ...f, background:BG, color:TEXT, minHeight:"100vh", overflowX:"hidden" } },
 
-  return (
-    <div style={{ ...f, background:BG, color:TEXT, minHeight:'100vh', overflowX:'hidden' }}>
+    // NAV
+    React.createElement("nav", { style:{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"20px 28px", position:"sticky", top:0, zIndex:100, background:"rgba(8,7,6,0.93)", backdropFilter:"blur(18px)", borderBottom:"1px solid rgba(255,255,255,0.04)" } },
+      React.createElement("div", null,
+        React.createElement("div", { style:{ fontSize:24, fontWeight:900, letterSpacing:"0.2em" } }, "BEARCLAW"),
+        React.createElement("div", { style:{ fontSize:9, letterSpacing:"0.35em", color:GOLD, ...b, fontWeight:500, marginTop:2 } }, "PROTECT YOUR CLAWS")
+      ),
+      React.createElement("div", { style:{ display:"flex", alignItems:"center", gap:12 } },
+        React.createElement(LangSwitcher, { lang, setLang }),
+        React.createElement("a", { href:"#liste", style:{ background:GOLD, color:BG, padding:"10px 20px", borderRadius:2, textDecoration:"none", fontSize:11, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", ...b } }, t.navCta)
+      )
+    ),
 
-      <nav style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'20px 28px', position:'sticky', top:0, zIndex:100, background:'rgba(8,7,6,0.93)', backdropFilter:'blur(18px)', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
-        <div>
-          <div style={{ fontSize:24, fontWeight:900, letterSpacing:'0.2em' }}>BEARCLAW</div>
-          <div style={{ fontSize:9, letterSpacing:'0.35em', color:GOLD, ...b, fontWeight:500, marginTop:2 }}>PROTECT YOUR CLAWS</div>
-        </div>
-        <a href="#liste" style={{ background:GOLD, color:BG, padding:'10px 20px', borderRadius:2, textDecoration:'none', fontSize:11, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', ...b }}>
-          Rejoindre la liste
-        </a>
-      </nav>
+    // HERO
+    React.createElement("section", { style:{ position:"relative", minHeight:"95vh", display:"flex", alignItems:"flex-end" } },
+      React.createElement("div", { style:{ position:"absolute", inset:0, backgroundImage:`linear-gradient(to bottom, rgba(8,7,6,0.4) 0%, rgba(8,7,6,0.72) 55%, ${BG} 100%), url(${HERO_IMG})`, backgroundSize:"cover", backgroundPosition:"center 30%" } }),
+      React.createElement("div", { style:{ position:"absolute", left:0, top:"15%", width:3, height:"35%", background:`linear-gradient(to bottom, transparent, ${GOLD}, transparent)` } }),
+      React.createElement("div", { style:{ position:"relative", zIndex:2, padding:"0 28px 72px", maxWidth:720, margin:"0 auto", width:"100%" } },
+        React.createElement("div", { style:{ display:"inline-flex", alignItems:"center", gap:10, marginBottom:32 } },
+          React.createElement("div", { style:{ width:28, height:1, background:GOLD } }),
+          React.createElement("span", { style:{ fontSize:10, letterSpacing:"0.25em", color:GOLD, ...b, fontWeight:500 } }, t.heroBadge)
+        ),
+        React.createElement("h1", { style:{ fontSize:"clamp(58px,13vw,110px)", lineHeight:0.92, fontWeight:900, letterSpacing:"0.02em", margin:"0 0 28px", textTransform:"uppercase" } },
+          "PROTECT",
+          React.createElement("br"),
+          React.createElement("span", { style:{ WebkitTextStroke:`2px ${GOLD}`, WebkitTextFillColor:"transparent" } }, "YOUR"),
+          React.createElement("br"),
+          "CLAWS."
+        ),
+        React.createElement("p", { style:{ fontSize:16, lineHeight:1.7, color:MUTED, maxWidth:460, margin:"0 0 40px", ...b, fontWeight:300 } }, t.heroSub),
+        React.createElement("div", { style:{ display:"flex", flexDirection:"column", gap:12, marginBottom:32, maxWidth:400 } },
+          React.createElement("a", { href:"#liste", style:{ background:GOLD, color:BG, padding:"17px 32px", borderRadius:2, textDecoration:"none", fontSize:13, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", textAlign:"center", display:"block", ...b } }, t.heroBtn),
+          React.createElement("a", { href:"#probleme", style:{ color:DIMMER, padding:"12px 0", textDecoration:"none", fontSize:11, letterSpacing:"0.12em", textTransform:"uppercase", textAlign:"center", display:"block", ...b } }, t.heroScroll)
+        )
+      )
+    ),
 
-      <section style={{ position:'relative', minHeight:'95vh', display:'flex', alignItems:'flex-end' }}>
-        <div style={{ position:'absolute', inset:0, backgroundImage:`linear-gradient(to bottom, rgba(8,7,6,0.4) 0%, rgba(8,7,6,0.72) 55%, ${BG} 100%), url(${HERO_IMG})`, backgroundSize:'cover', backgroundPosition:'center 30%' }} />
-        <div style={{ position:'absolute', left:0, top:'15%', width:3, height:'35%', background:`linear-gradient(to bottom, transparent, ${GOLD}, transparent)` }} />
-        <div style={{ position:'relative', zIndex:2, padding:'0 28px 72px', maxWidth:720, margin:'0 auto', width:'100%' }}>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:10, marginBottom:32 }}>
-            <div style={{ width:28, height:1, background:GOLD }} />
-            <span style={{ fontSize:10, letterSpacing:'0.25em', color:GOLD, ...b, fontWeight:500 }}>EARLY ACCESS · FRANCE</span>
-          </div>
-          <h1 style={{ fontSize:'clamp(58px,13vw,110px)', lineHeight:0.92, fontWeight:900, letterSpacing:'0.02em', margin:'0 0 28px', textTransform:'uppercase' }}>
-            PROTECT<br/>
-            <span style={{ WebkitTextStroke:`2px ${GOLD}`, WebkitTextFillColor:'transparent' }}>YOUR</span><br/>
-            CLAWS.
-          </h1>
-          <p style={{ fontSize:16, lineHeight:1.7, color:MUTED, maxWidth:460, margin:'0 0 40px', ...b, fontWeight:300 }}>
-            Le premier coating technique conçu pour les coureurs de trail et de running.
-            Fini les ongles noirs, les hématomes, les ongles qui tombent.
-          </p>
-          <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:32, maxWidth:400 }}>
-            <a href="#liste" style={{ background:GOLD, color:BG, padding:'17px 32px', borderRadius:2, textDecoration:'none', fontSize:13, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', textAlign:'center', display:'block', ...b }}>
-              Rejoindre la liste d'attente
-            </a>
-            <a href="#probleme" style={{ color:DIMMER, padding:'12px 0', textDecoration:'none', fontSize:11, letterSpacing:'0.12em', textTransform:'uppercase', textAlign:'center', display:'block', ...b }}>
-              Comprendre le problème ↓
-            </a>
-          </div>
-        </div>
-      </section>
+    // STATS
+    React.createElement("div", { style:{ borderTop:"1px solid rgba(255,255,255,0.06)", borderBottom:"1px solid rgba(255,255,255,0.06)" } },
+      t.stats.map((s,i) =>
+        React.createElement("div", { key:i, style:{ padding:"32px 28px", borderBottom:"1px solid rgba(255,255,255,0.04)", maxWidth:720, margin:"0 auto", width:"100%" } },
+          React.createElement("div", { style:{ fontSize:"clamp(44px,9vw,72px)", fontWeight:900, color:GOLD, letterSpacing:"-0.02em", lineHeight:1, marginBottom:8 } }, s.value),
+          React.createElement("div", { style:{ fontSize:11, color:MUTED, letterSpacing:"0.12em", textTransform:"uppercase", ...b, fontWeight:400 } }, s.label)
+        )
+      )
+    ),
 
-      <div style={{ borderTop:'1px solid rgba(255,255,255,0.06)', borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
-        {stats.map((s,i) => (
-          <div key={i} style={{ padding:'32px 28px', borderBottom:'1px solid rgba(255,255,255,0.04)', maxWidth:720, margin:'0 auto', width:'100%' }}>
-            <div style={{ fontSize:'clamp(44px,9vw,72px)', fontWeight:900, color:GOLD, letterSpacing:'-0.02em', lineHeight:1, marginBottom:8 }}>{s.value}</div>
-            <div style={{ fontSize:11, color:MUTED, letterSpacing:'0.12em', textTransform:'uppercase', ...b, fontWeight:400 }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
+    // PROBLEME
+    React.createElement("section", { id:"probleme", style:{ padding:"88px 28px", maxWidth:720, margin:"0 auto" } },
+      React.createElement("div", { style:{ marginBottom:52 } },
+        React.createElement(Tag, null, t.problemTag),
+        React.createElement("h2", { style:{ fontSize:"clamp(30px,6vw,52px)", fontWeight:900, lineHeight:1.05, letterSpacing:"0.02em", textTransform:"uppercase" } },
+          t.problemTitle1, React.createElement("br"), t.problemTitle2
+        )
+      ),
+      React.createElement("div", { style:{ position:"relative", borderRadius:4, overflow:"hidden", marginBottom:52, aspectRatio:"16/7" } },
+        React.createElement("img", { src:IMG_TRAIL, alt:"Trail runner", style:{ width:"100%", height:"100%", objectFit:"cover", display:"block" } }),
+        React.createElement("div", { style:{ position:"absolute", inset:0, background:"linear-gradient(to top, rgba(8,7,6,0.9) 0%, rgba(8,7,6,0.1) 60%)" } }),
+        React.createElement("div", { style:{ position:"absolute", bottom:24, left:28, right:28 } },
+          React.createElement("div", { style:{ width:24, height:1, background:GOLD, marginBottom:12 } }),
+          React.createElement("p", { style:{ fontSize:14, lineHeight:1.6, color:"rgba(237,232,223,0.7)", fontStyle:"italic", ...b, fontWeight:300 } }, t.quote),
+          React.createElement("p", { style:{ fontSize:10, color:MUTED, letterSpacing:"0.12em", textTransform:"uppercase", ...b, marginTop:8 } }, t.quoteAuthor)
+        )
+      ),
+      t.problems.map((p,i) =>
+        React.createElement("div", { key:i, style:{ display:"flex", gap:28, alignItems:"flex-start", padding:"28px 0", borderBottom:"1px solid rgba(255,255,255,0.05)" } },
+          React.createElement("div", { style:{ fontSize:10, fontWeight:700, color:GOLD, letterSpacing:"0.15em", minWidth:28, paddingTop:5, ...b } }, p.num),
+          React.createElement("div", null,
+            React.createElement("h3", { style:{ fontSize:"clamp(18px,4vw,24px)", fontWeight:900, letterSpacing:"0.05em", margin:"0 0 10px", textTransform:"uppercase" } }, p.title),
+            React.createElement("p", { style:{ fontSize:14, color:MUTED, lineHeight:1.7, margin:0, ...b, fontWeight:300 } }, p.desc)
+          )
+        )
+      )
+    ),
 
-      <section id="probleme" style={{ padding:'88px 28px', maxWidth:720, margin:'0 auto' }}>
-        <div style={{ marginBottom:52 }}>
-          <Tag>Le Problème</Tag>
-          <h2 style={{ fontSize:'clamp(30px,6vw,52px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase' }}>
-            Ce qui arrive à ton pied<br/>après 30 km de descente.
-          </h2>
-        </div>
-        <div style={{ position:'relative', borderRadius:4, overflow:'hidden', marginBottom:52, aspectRatio:'16/7' }}>
-          <img src={IMG_TRAIL} alt="Trail runner" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
-          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(8,7,6,0.9) 0%, rgba(8,7,6,0.1) 60%)' }} />
-          <div style={{ position:'absolute', bottom:24, left:28, right:28 }}>
-            <div style={{ width:24, height:1, background:GOLD, marginBottom:12 }} />
-            <p style={{ fontSize:14, lineHeight:1.6, color:'rgba(237,232,223,0.7)', fontStyle:'italic', ...b, fontWeight:300 }}>
-              "Presque tous les coureurs ayant un programme marathon sérieux développent au moins un ongle noir."
-            </p>
-            <p style={{ fontSize:10, color:MUTED, letterSpacing:'0.12em', textTransform:'uppercase', ...b, marginTop:8 }}>Jeff Galloway, coach running, 45 ans d'expérience</p>
-          </div>
-        </div>
-        {problems.map((p,i) => (
-          <div key={i} style={{ display:'flex', gap:28, alignItems:'flex-start', padding:'28px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
-            <div style={{ fontSize:10, fontWeight:700, color:GOLD, letterSpacing:'0.15em', minWidth:28, paddingTop:5, ...b }}>{p.num}</div>
-            <div>
-              <h3 style={{ fontSize:'clamp(18px,4vw,24px)', fontWeight:900, letterSpacing:'0.05em', margin:'0 0 10px', textTransform:'uppercase' }}>{p.title}</h3>
-              <p style={{ fontSize:14, color:MUTED, lineHeight:1.7, margin:0, ...b, fontWeight:300 }}>{p.desc}</p>
-            </div>
-          </div>
-        ))}
-      </section>
+    // SOLUTION
+    React.createElement("section", { style:{ background:BG2, padding:"88px 0", borderTop:"1px solid rgba(255,255,255,0.04)", borderBottom:"1px solid rgba(255,255,255,0.04)" } },
+      React.createElement("div", { style:{ maxWidth:720, margin:"0 auto", padding:"0 28px" } },
+        React.createElement("div", { style:{ marginBottom:52 } },
+          React.createElement(Tag, null, t.solutionTag),
+          React.createElement("h2", { style:{ fontSize:"clamp(30px,6vw,52px)", fontWeight:900, lineHeight:1.05, letterSpacing:"0.02em", textTransform:"uppercase", margin:"0 0 16px" } },
+            t.solutionTitle1, React.createElement("br"), t.solutionTitle2
+          ),
+          React.createElement("p", { style:{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 } }, t.solutionSub)
+        ),
+        React.createElement("div", { style:{ borderRadius:4, overflow:"hidden", aspectRatio:"16/9", marginBottom:40 } },
+          React.createElement("img", { src:IMG_ROCK, alt:"Trail mountain", style:{ width:"100%", height:"100%", objectFit:"cover", display:"block" } })
+        ),
+        t.features.map((feat,i) =>
+          React.createElement("div", { key:i, style:{ display:"flex", gap:28, alignItems:"flex-start", padding:"22px 0", borderBottom:"1px solid rgba(255,255,255,0.05)" } },
+            React.createElement("div", { style:{ fontSize:10, fontWeight:700, color:GOLD, letterSpacing:"0.15em", minWidth:28, paddingTop:4, ...b } }, String(i+1).padStart(2,"0")),
+            React.createElement("div", null,
+              React.createElement("div", { style:{ fontSize:16, fontWeight:900, letterSpacing:"0.06em", marginBottom:7, textTransform:"uppercase" } }, feat.title),
+              React.createElement("div", { style:{ fontSize:13, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 } }, feat.desc)
+            )
+          )
+        )
+      )
+    ),
 
-      <section style={{ background:BG2, padding:'88px 0', borderTop:'1px solid rgba(255,255,255,0.04)', borderBottom:'1px solid rgba(255,255,255,0.04)' }}>
-        <div style={{ maxWidth:720, margin:'0 auto', padding:'0 28px' }}>
-          <div style={{ marginBottom:52 }}>
-            <Tag>La Solution</Tag>
-            <h2 style={{ fontSize:'clamp(30px,6vw,52px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase', margin:'0 0 16px' }}>
-              Un coating.<br/>Pas un vernis.
-            </h2>
-            <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>
-              BEARCLAW est formulé comme un équipement de protection. La nuance est totale.
-            </p>
-          </div>
-          <div style={{ borderRadius:4, overflow:'hidden', aspectRatio:'16/9', marginBottom:40 }}>
-            <img src={IMG_ROCK} alt="Trail montagne" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
-          </div>
-          {features.map((feat,i) => (
-            <div key={i} style={{ display:'flex', gap:28, alignItems:'flex-start', padding:'22px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ fontSize:10, fontWeight:700, color:GOLD, letterSpacing:'0.15em', minWidth:28, paddingTop:4, ...b }}>{String(i+1).padStart(2,'0')}</div>
-              <div>
-                <div style={{ fontSize:16, fontWeight:900, letterSpacing:'0.06em', marginBottom:7, textTransform:'uppercase' }}>{feat.title}</div>
-                <div style={{ fontSize:13, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>{feat.desc}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+    // BANNER
+    React.createElement("div", { style:{ position:"relative", aspectRatio:"21/8", overflow:"hidden" } },
+      React.createElement("img", { src:IMG_FINISH, alt:"Runner", style:{ width:"100%", height:"100%", objectFit:"cover", display:"block" } }),
+      React.createElement("div", { style:{ position:"absolute", inset:0, background:"linear-gradient(to right, rgba(8,7,6,0.88) 0%, rgba(8,7,6,0.25) 100%)" } }),
+      React.createElement("div", { style:{ position:"absolute", inset:0, display:"flex", alignItems:"center", padding:"0 32px" } },
+        React.createElement("div", null,
+          React.createElement("div", { style:{ width:24, height:1, background:GOLD, marginBottom:16 } }),
+          React.createElement("div", { style:{ fontSize:"clamp(22px,5vw,44px)", fontWeight:900, lineHeight:1.1, letterSpacing:"0.04em", textTransform:"uppercase", maxWidth:380 } },
+            t.banner1, React.createElement("br"),
+            React.createElement("span", { style:{ color:GOLD } }, t.banner2)
+          )
+        )
+      )
+    ),
 
-      <div style={{ position:'relative', aspectRatio:'21/8', overflow:'hidden' }}>
-        <img src={IMG_FINISH} alt="Coureur finish" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
-        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to right, rgba(8,7,6,0.88) 0%, rgba(8,7,6,0.25) 100%)' }} />
-        <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', padding:'0 32px' }}>
-          <div>
-            <div style={{ width:24, height:1, background:GOLD, marginBottom:16 }} />
-            <div style={{ fontSize:'clamp(22px,5vw,44px)', fontWeight:900, lineHeight:1.1, letterSpacing:'0.04em', textTransform:'uppercase', maxWidth:380 }}>
-              Chaque kilomètre compte.<br/>
-              <span style={{ color:GOLD }}>Tes ongles aussi.</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    // WAITLIST
+    React.createElement("section", { id:"liste", style:{ background:`linear-gradient(160deg, #100d06 0%, ${BG} 65%)`, padding:"88px 28px", borderTop:`1px solid ${GOLD_BORDER}` } },
+      React.createElement("div", { style:{ maxWidth:560, margin:"0 auto" } },
+        React.createElement("div", { style:{ marginBottom:40 } },
+          React.createElement(Tag, null, t.waitlistTag),
+          React.createElement("h2", { style:{ fontSize:"clamp(30px,6vw,48px)", fontWeight:900, lineHeight:1.05, letterSpacing:"0.02em", textTransform:"uppercase", margin:"0 0 16px" } },
+            t.waitlistTitle1, React.createElement("br"), t.waitlistTitle2
+          ),
+          React.createElement("p", { style:{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 } }, t.waitlistSub)
+        ),
+        !submitted ? React.createElement("div", { style:{ display:"flex", flexDirection:"column", gap:10 } },
+          React.createElement("input", { type:"email", placeholder:t.emailPlaceholder, value:email, onChange:e=>setEmail(e.target.value), style:{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:2, padding:"15px 18px", color:TEXT, fontSize:14, ...b, fontWeight:300, width:"100%" } }),
+          React.createElement("select", { value:sport, onChange:e=>setSport(e.target.value), style:{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:2, padding:"15px 18px", color:sport?TEXT:MUTED, fontSize:14, ...b, fontWeight:300, width:"100%" } },
+            React.createElement("option", { value:"" }, t.sportPlaceholder),
+            t.sports.map((s,i) => React.createElement("option", { key:i, value:s }, s))
+          ),
+          React.createElement("label", { style:{ display:"flex", alignItems:"flex-start", gap:12, cursor:"pointer", marginTop:4 } },
+            React.createElement("input", { type:"checkbox", checked:consent, onChange:e=>setConsent(e.target.checked), style:{ marginTop:3, accentColor:GOLD, width:16, height:16, flexShrink:0, cursor:"pointer" } }),
+            React.createElement("span", { style:{ fontSize:12, color:MUTED, lineHeight:1.6, ...b, fontWeight:300 } }, t.consentText)
+          ),
+          error && React.createElement("p", { style:{ fontSize:12, color:"#ff6b6b", ...b, margin:"4px 0" } }, error),
+          React.createElement("button", { onClick:submit, disabled:loading, style:{ background:loading?"rgba(184,150,62,0.5)":GOLD, color:BG, border:"none", borderRadius:2, padding:"17px 24px", fontSize:12, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", cursor:loading?"not-allowed":"pointer", width:"100%", marginTop:4, ...b, display:"flex", alignItems:"center", justifyContent:"center", gap:10 } },
+            loading && React.createElement("span", { style:{ display:"inline-block", width:14, height:14, border:"2px solid rgba(8,7,6,0.3)", borderTopColor:BG, borderRadius:"50%", animation:"spin 0.8s linear infinite" } }),
+            loading ? t.btnLoading : t.btnSubmit
+          ),
+          React.createElement("p", { style:{ fontSize:11, color:DIMMER, lineHeight:1.6, textAlign:"center", letterSpacing:"0.04em", ...b, marginTop:6 } }, t.formNote)
+        ) : React.createElement("div", { style:{ background:GOLD_DIM, border:`1px solid ${GOLD_BORDER}`, borderRadius:4, padding:"40px 28px", textAlign:"center" } },
+          React.createElement("div", { style:{ width:52, height:52, borderRadius:"50%", background:GOLD, color:BG, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", fontSize:22, fontWeight:900 } }, "\u2713"),
+          React.createElement("h3", { style:{ fontSize:22, fontWeight:900, margin:"0 0 12px", letterSpacing:"0.08em", textTransform:"uppercase" } }, t.successTitle),
+          React.createElement("p", { style:{ fontSize:14, color:MUTED, lineHeight:1.65, margin:"0 0 24px", ...b, fontWeight:300 } }, t.successText),
+          React.createElement("button", { onClick:()=>navigator.clipboard&&navigator.clipboard.writeText(window.location.href), style:{ background:"transparent", border:`1px solid ${GOLD_BORDER}`, color:GOLD, padding:"12px 24px", borderRadius:2, fontSize:11, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", cursor:"pointer", ...b } }, t.shareBtn)
+        )
+      )
+    ),
 
-      <section id="liste" style={{ background:`linear-gradient(160deg, #100d06 0%, ${BG} 65%)`, padding:'88px 28px', borderTop:`1px solid ${GOLD_BORDER}` }}>
-        <div style={{ maxWidth:560, margin:'0 auto' }}>
-          <div style={{ marginBottom:40 }}>
-            <Tag>Liste d'attente</Tag>
-            <h2 style={{ fontSize:'clamp(30px,6vw,48px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase', margin:'0 0 16px' }}>
-              Sois parmi les premiers.<br/>Façonne le produit.
-            </h2>
-            <p style={{ fontSize:15, color:MUTED, lineHeight:1.65, ...b, fontWeight:300 }}>
-              BEARCLAW est en cours de développement. Laisse ton email pour être informé en avant-première et bénéficier d'un prix fondateur exclusif au lancement.
-            </p>
-          </div>
+    // FAQ
+    React.createElement("section", { style:{ padding:"88px 28px", maxWidth:720, margin:"0 auto" } },
+      React.createElement("div", { style:{ marginBottom:52 } },
+        React.createElement(Tag, null, t.faqTag),
+        React.createElement("h2", { style:{ fontSize:"clamp(30px,6vw,52px)", fontWeight:900, lineHeight:1.05, letterSpacing:"0.02em", textTransform:"uppercase" } },
+          t.faqTitle1, React.createElement("br"), t.faqTitle2
+        )
+      ),
+      t.faqs.map((faq,i) =>
+        React.createElement("div", { key:i, style:{ padding:"28px 0", borderBottom:"1px solid rgba(255,255,255,0.05)" } },
+          React.createElement("h3", { style:{ fontSize:"clamp(16px,3vw,20px)", fontWeight:900, margin:"0 0 12px", letterSpacing:"0.04em", textTransform:"uppercase" } }, faq.q),
+          React.createElement("p", { style:{ fontSize:14, color:MUTED, lineHeight:1.7, margin:0, ...b, fontWeight:300 } }, faq.a)
+        )
+      )
+    ),
 
-          {!submitted ? (
-            <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-              <input type="email" placeholder="ton@email.com" value={email}
-                onChange={e => setEmail(e.target.value)}
-                style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:2, padding:'15px 18px', color:TEXT, fontSize:14, ...b, fontWeight:300, width:'100%' }} />
-              <select value={sport} onChange={e => setSport(e.target.value)}
-                style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:2, padding:'15px 18px', color:sport?TEXT:MUTED, fontSize:14, ...b, fontWeight:300, width:'100%' }}>
-                <option value="">Ton sport principal</option>
-                <option value="Trail running">Trail running</option>
-                <option value="Marathon / route">Marathon / route</option>
-                <option value="Triathlon">Triathlon</option>
-                <option value="Football">Football</option>
-                <option value="Autre">Autre</option>
-              </select>
-              <label style={{ display:'flex', alignItems:'flex-start', gap:12, cursor:'pointer', marginTop:4 }}>
-                <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)}
-                  style={{ marginTop:3, accentColor:GOLD, width:16, height:16, flexShrink:0, cursor:'pointer' }} />
-                <span style={{ fontSize:12, color:MUTED, lineHeight:1.6, ...b, fontWeight:300 }}>
-                  J'accepte de recevoir des informations sur BEARCLAW par email. Pas de spam — uniquement les updates produit et l'accès anticipé au lancement. Désinscription possible à tout moment.
-                </span>
-              </label>
-              {error && React.createElement('p', { style:{ fontSize:12, color:'#ff6b6b', ...b, margin:'4px 0' } }, error)}
-              <button onClick={submit} disabled={loading}
-                style={{ background:loading?'rgba(184,150,62,0.5)':GOLD, color:BG, border:'none', borderRadius:2, padding:'17px 24px', fontSize:12, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', cursor:loading?'not-allowed':'pointer', width:'100%', marginTop:4, ...b, display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}>
-                {loading && React.createElement('span', { style:{ display:'inline-block', width:14, height:14, border:'2px solid rgba(8,7,6,0.3)', borderTopColor:BG, borderRadius:'50%', animation:'spin 0.8s linear infinite' } })}
-                {loading ? 'Inscription en cours...' : "Je rejoins la liste d'attente"}
-              </button>
-              <p style={{ fontSize:11, color:DIMMER, lineHeight:1.6, textAlign:'center', letterSpacing:'0.04em', ...b, marginTop:6 }}>
-                Aucun paiement requis · Tu seras contacté en priorité au lancement
-              </p>
-            </div>
-          ) : (
-            <div style={{ background:GOLD_DIM, border:`1px solid ${GOLD_BORDER}`, borderRadius:4, padding:'40px 28px', textAlign:'center' }}>
-              <div style={{ width:52, height:52, borderRadius:'50%', background:GOLD, color:BG, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', fontSize:22, fontWeight:900 }}>✓</div>
-              <h3 style={{ fontSize:22, fontWeight:900, margin:'0 0 12px', letterSpacing:'0.08em', textTransform:'uppercase' }}>Tu es dans la liste.</h3>
-              <p style={{ fontSize:14, color:MUTED, lineHeight:1.65, margin:'0 0 24px', ...b, fontWeight:300 }}>
-                On te contacte en premier dès que BEARCLAW est prêt. Partage avec tes partenaires de trail.
-              </p>
-              <button onClick={() => navigator.clipboard?.writeText(window.location.href)}
-                style={{ background:'transparent', border:`1px solid ${GOLD_BORDER}`, color:GOLD, padding:'12px 24px', borderRadius:2, fontSize:11, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', cursor:'pointer', ...b }}>
-                Copier le lien à partager
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section style={{ padding:'88px 28px', maxWidth:720, margin:'0 auto' }}>
-        <div style={{ marginBottom:52 }}>
-          <Tag>FAQ</Tag>
-          <h2 style={{ fontSize:'clamp(30px,6vw,52px)', fontWeight:900, lineHeight:1.05, letterSpacing:'0.02em', textTransform:'uppercase' }}>
-            Questions directes,<br/>réponses directes.
-          </h2>
-        </div>
-        {faqs.map((faq,i) => (
-          <div key={i} style={{ padding:'28px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
-            <h3 style={{ fontSize:'clamp(16px,3vw,20px)', fontWeight:900, margin:'0 0 12px', letterSpacing:'0.04em', textTransform:'uppercase' }}>{faq.q}</h3>
-            <p style={{ fontSize:14, color:MUTED, lineHeight:1.7, margin:0, ...b, fontWeight:300 }}>{faq.a}</p>
-          </div>
-        ))}
-      </section>
-
-      <footer style={{ borderTop:'1px solid rgba(255,255,255,0.05)', padding:'48px 28px', textAlign:'center' }}>
-        <div style={{ fontSize:24, fontWeight:900, letterSpacing:'0.2em', marginBottom:6 }}>BEARCLAW</div>
-        <div style={{ fontSize:9, letterSpacing:'0.35em', color:GOLD, ...b, fontWeight:500, marginBottom:20 }}>PROTECT YOUR CLAWS</div>
-        <p style={{ fontSize:11, color:DIMMER, letterSpacing:'0.08em', textTransform:'uppercase', ...b, margin:'0 0 8px' }}>
-          Un projet fondé par des sportifs, pour des sportifs · France · 2025
-        </p>
-        <p style={{ fontSize:12, color:DIMMER, ...b, fontWeight:300, lineHeight:1.7, maxWidth:480, margin:'16px auto 8px' }}>
-          Politique de confidentialité — Les données collectées (email, sport pratiqué) sont utilisées uniquement pour t'informer de l'avancement du projet BEARCLAW et du lancement du produit. Elles ne sont jamais vendues ni partagées avec des tiers. Tu peux te désinscrire à tout moment en écrivant à <a href="mailto:contact@bearclaw.fr" style={{ color:GOLD, textDecoration:'none' }}>contact@bearclaw.fr</a>. Responsable du traitement : BEARCLAW, contact@bearclaw.fr.
-        </p>
-        <p style={{ fontSize:10, color:'rgba(237,232,223,0.12)', ...b, marginTop:16 }}>
-          © 2025 BEARCLAW. Produit en cours de développement. Tous droits réservés.
-        </p>
-      </footer>
-
-    </div>
+    // FOOTER
+    React.createElement("footer", { style:{ borderTop:"1px solid rgba(255,255,255,0.05)", padding:"48px 28px", textAlign:"center" } },
+      React.createElement("div", { style:{ fontSize:24, fontWeight:900, letterSpacing:"0.2em", marginBottom:6 } }, "BEARCLAW"),
+      React.createElement("div", { style:{ fontSize:9, letterSpacing:"0.35em", color:GOLD, ...b, fontWeight:500, marginBottom:20 } }, "PROTECT YOUR CLAWS"),
+      React.createElement("p", { style:{ fontSize:11, color:DIMMER, letterSpacing:"0.08em", textTransform:"uppercase", ...b, margin:"0 0 8px" } }, t.footerSub),
+      React.createElement("p", { style:{ fontSize:12, color:DIMMER, ...b, fontWeight:300, lineHeight:1.7, maxWidth:480, margin:"16px auto 8px" } },
+        t.privacyText, " ",
+        React.createElement("a", { href:"mailto:contact@bearclaw.fr", style:{ color:GOLD, textDecoration:"none" } }, "contact@bearclaw.fr"),
+        "."
+      ),
+      React.createElement("p", { style:{ fontSize:10, color:"rgba(237,232,223,0.12)", ...b, marginTop:16 } }, t.copyright)
+    )
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(App));
   </script>
 </body>
